@@ -59,8 +59,12 @@
 /ufp-edge-products.html /other-products.html 301
 /pergolas--awnings.html /other-products.html 301
 /other-construction-products.html /other-products.html 301
+/deck-features-and-accessories.html /other-products.html 301
 /service-area /service-areas.html 301
 /service-area/* /service-areas.html 301
+/ogden-ut.html /service-areas.html 301
+/business-depot.html /service-areas.html 301
+/deck-supplier-ogden-ut-gmb-stack.html /service-areas.html 301
 /clearfield.html /service-areas.html 301
 /hooper.html /service-areas.html 301
 /riverdale.html /service-areas.html 301
@@ -90,6 +94,7 @@
 /kaysville-decking /decking-supply-kaysville-utah.html 301
 /kaysville-deck-supply /decking-supply-kaysville-utah.html 301
 /material-sales-lead-form.html /contact.html 301
-/form-submission.html /contact.html 301
-/equipment-rental-check-out-form.html /contact.html 301
+/form-submission.html /forms.html 301
+/form-submission /forms.html 301
+/deck-supplies-online.html https://ogdendeckdepot.shop.ruckdelivery.com 301
 /media-room.html /contact.html 301
