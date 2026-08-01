@@ -5,11 +5,17 @@ BASE_URL="https://d3463ff9.tmclife.pages.dev"
 rm -rf dist mirror
 mkdir -p dist mirror
 
-# Mirror the current stable Cloudflare deployment.
+# Mirror the current stable Cloudflare deployment. Wget may report non-critical
+# missing legacy assets, so continue as long as the homepage was downloaded.
 wget --quiet --mirror --page-requisites --adjust-extension --convert-links --no-parent \
-  --directory-prefix=mirror "$BASE_URL/"
+  --directory-prefix=mirror "$BASE_URL/" || true
 
 SOURCE_DIR="mirror/d3463ff9.tmclife.pages.dev"
+if [ ! -f "$SOURCE_DIR/index.html" ]; then
+  echo "Baseline homepage was not downloaded" >&2
+  find mirror -maxdepth 3 -type f | head -50 >&2 || true
+  exit 1
+fi
 cp -a "$SOURCE_DIR/." dist/
 
 # Remove the stray visible Google ads.txt line from generated HTML.
