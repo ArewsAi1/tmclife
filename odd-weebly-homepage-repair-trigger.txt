@@ -1,2 +1,2 @@
-Trigger corrected root-relative Weebly asset resolver and zero-missing validation.
-Run 9.
+Trigger expanded Weebly filename matching and site-wide zero-missing validation.
+Run 10.
