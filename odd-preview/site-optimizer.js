@@ -1,6 +1,6 @@
 (function(){
   function normalizePath(value){
-    try{return new URL(value,location.href).pathname.replace(/^\//,'').toLowerCase();}catch(_){return '';}
+    try{return new URL(value,location.href).pathname.replace(/^\//,'').replace(/\/$/,'').toLowerCase();}catch(_){return '';}
   }
 
   function pruneLegacyNavigation(){
@@ -29,7 +29,6 @@
       });
     });
 
-    /* Keep product categories and brands visible, but remove third-level color/SKU flyouts. */
     document.querySelectorAll('.nav > ul > li').forEach(function(topItem){
       var topLink=topItem.querySelector(':scope > a');
       if(!topLink)return;
@@ -51,7 +50,8 @@
   }
 
   function restoreContactPage(){
-    if(normalizePath(location.href)!=='contact.html')return;
+    var currentPath=normalizePath(location.href);
+    if(currentPath!=='contact.html'&&currentPath!=='contact')return;
     var content=document.querySelector('#wsite-content,.main-wrap .container,.wsite-section-elements');
     if(!content)return;
     Array.from(content.querySelectorAll('h1,h2,h3,div.paragraph,p')).forEach(function(el){
