@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - .github/workflows/restore-odd-weebly.yml
   workflow_dispatch:
 
 permissions:
@@ -13,7 +11,6 @@ permissions:
 
 jobs:
   restore:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Check out Ogden Deck Depot production branch
@@ -36,31 +33,23 @@ jobs:
           unzip -q /tmp/odd-weebly.zip -d /tmp/odd-extract
           src="$(find /tmp/odd-extract -mindepth 1 -maxdepth 1 -type d | head -n 1)"
           test -f "$src/index.html"
-
           for item in functions _headers _redirects; do
-            if [ -e "odd-preview/$item" ]; then
-              cp -a "odd-preview/$item" "/tmp/odd-preserve/$item"
-            fi
+            if [ -e "odd-preview/$item" ]; then cp -a "odd-preview/$item" "/tmp/odd-preserve/$item"; fi
           done
-
           rm -rf odd-preview
           mkdir -p odd-preview
           cp -a "$src/." odd-preview/
-
           for item in functions _headers _redirects; do
-            if [ -e "/tmp/odd-preserve/$item" ]; then
-              cp -a "/tmp/odd-preserve/$item" "odd-preview/$item"
-            fi
+            if [ -e "/tmp/odd-preserve/$item" ]; then cp -a "/tmp/odd-preserve/$item" "odd-preview/$item"; fi
           done
 
       - name: Make archived Weebly files safe on HTTPS
         run: |
-          find odd-preview -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -print0 | \
-            xargs -0 sed -i \
-              -e 's|http://cdn11\.editmysite\.com|https://cdn11.editmysite.com|g' \
-              -e 's|http://cdn2\.editmysite\.com|https://cdn2.editmysite.com|g' \
-              -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g' \
-              -e 's|href="http:///uploads/|href="/uploads/|g'
+          find odd-preview -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -print0 | xargs -0 sed -i \
+            -e 's|http://cdn11\.editmysite\.com|https://cdn11.editmysite.com|g' \
+            -e 's|http://cdn2\.editmysite\.com|https://cdn2.editmysite.com|g' \
+            -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g' \
+            -e 's|href="http:///uploads/|href="/uploads/|g'
 
       - name: Verify exact export inventory
         run: |
