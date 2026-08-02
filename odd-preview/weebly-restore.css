@@ -1,0 +1,12 @@
+/* Live Cloudflare compatibility layer for the restored Weebly Birdseye theme. */
+html,body{max-width:100%;overflow-x:hidden}
+img{max-width:100%;height:auto}
+.birdseye-header,body.header-overlay-on .birdseye-header,body.affix .birdseye-header,body.no-header-page .birdseye-header,body.splash-banner-page .birdseye-header{background:#fff!important;color:#000!important;border-color:rgba(0,0,0,.12)!important;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+.birdseye-header a,.birdseye-header .wsite-menu-item,.birdseye-header #wsite-title,.birdseye-header .wsite-phone{color:#000!important}
+.birdseye-header .hamburger span,.birdseye-header .hamburger span:before,.birdseye-header .hamburger span:after{background:#000!important}
+.wsite-logo img,.birdseye-header .logo img{object-fit:contain}
+.wsite-image img,.wsite-imageborder,.galleryImageBorder,.wsite-com-product-images-main-image img{max-width:100%!important;height:auto!important}
+.main-wrap .container,.banner-wrap .container,.footer-wrap .wsite-footer{box-sizing:border-box}
+.wsite-section-elements{max-width:100%}
+@media(max-width:991px){.birdseye-header{padding:14px 20px!important}.birdseye-header .logo img{max-height:42px!important}.nav ul{max-width:none!important}.main-wrap .container{padding-left:24px!important;padding-right:24px!important}}
+@media(max-width:767px){.birdseye-header{min-height:68px}.birdseye-header .hamburger{display:block!important}.birdseye-header .logo #wsite-title{font-size:20px!important}.banner-wrap h2,.wsite-headline{font-size:42px!important;line-height:1.1!important}.main-wrap .container,.banner-wrap .container,.footer-wrap .wsite-footer{padding-left:18px!important;padding-right:18px!important}.wsite-multicol-col{display:block!important;width:100%!important;padding-left:0!important;padding-right:0!important}.wsite-image{max-width:100%!important}.wsite-menu-wrap{z-index:9999}}
