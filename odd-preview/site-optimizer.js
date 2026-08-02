@@ -7,7 +7,7 @@
     var links=document.querySelectorAll('.nav a,.wsite-menu a');
     links.forEach(function(link){
       var path=normalizePath(link.getAttribute('href')||'');
-      if(path==='blog.html'){
+      if(path==='blog.html'||path==='blog'){
         var item=link.closest('li');
         if(item){
           var submenu=item.querySelector(':scope > .wsite-menu-wrap');
@@ -28,6 +28,17 @@
         else seen.add(key);
       });
     });
+
+    /* Keep product categories and brands visible, but remove third-level color/SKU flyouts. */
+    document.querySelectorAll('.nav > ul > li').forEach(function(topItem){
+      var topLink=topItem.querySelector(':scope > a');
+      if(!topLink)return;
+      var text=(topLink.textContent||'').trim().toLowerCase();
+      var path=normalizePath(topLink.getAttribute('href')||'');
+      if(text.indexOf('our products')===-1&&path!=='products-ogden-deck-depot.html')return;
+      topItem.querySelectorAll('.wsite-menu .wsite-menu .wsite-menu-wrap').forEach(function(deepMenu){deepMenu.remove();});
+      topItem.querySelectorAll('.wsite-menu .wsite-menu-item-wrap-has-children').forEach(function(item){item.classList.remove('wsite-menu-item-wrap-has-children');});
+    });
   }
 
   function improveControls(){
@@ -39,6 +50,37 @@
     document.querySelectorAll('input,textarea,select').forEach(function(field){if(!field.getAttribute('autocomplete')&&field.type==='email')field.setAttribute('autocomplete','email');});
   }
 
-  function run(){pruneLegacyNavigation();improveControls();document.documentElement.classList.add('odd-optimized');}
+  function restoreContactPage(){
+    if(normalizePath(location.href)!=='contact.html')return;
+    var content=document.querySelector('#wsite-content,.main-wrap .container,.wsite-section-elements');
+    if(!content)return;
+    Array.from(content.querySelectorAll('h1,h2,h3,div.paragraph,p')).forEach(function(el){
+      if((el.textContent||'').trim().toLowerCase()==='under construction'){
+        el.textContent='Contact Ogden Deck Depot';
+      }
+    });
+    if(document.getElementById('odd-contact-form'))return;
+    var section=document.createElement('section');
+    section.id='odd-contact-form';
+    section.className='odd-contact-card';
+    section.innerHTML='<h2>Tell Us What You Need</h2><p>Ask about decking, railing, lumber, hardware, delivery, product availability, or contractor pricing. You can also call <a href="tel:+14352225819">(435) 222-5819</a>.</p><form><div class="odd-form-grid"><label>Name<input name="name" autocomplete="name" required></label><label>Phone<input name="phone" type="tel" autocomplete="tel"></label><label>Email<input name="email" type="email" autocomplete="email"></label><label>City<input name="city" autocomplete="address-level2"></label></div><label>What can we help with?<select name="project_type"><option value="Decking materials">Decking materials</option><option value="Railing">Railing</option><option value="Lumber and framing">Lumber and framing</option><option value="Hardware and fasteners">Hardware and fasteners</option><option value="Delivery or contractor pricing">Delivery or contractor pricing</option><option value="Other">Other</option></select></label><label>Details<textarea name="message" rows="5"></textarea></label><input name="website" tabindex="-1" autocomplete="off" class="odd-hp" aria-hidden="true"><input type="hidden" name="lead_type" value="contact-page"><input type="hidden" name="source_url" value="'+location.href.replace(/"/g,'&quot;')+'"><button type="submit">Send Request</button><p class="odd-form-status" role="status" aria-live="polite"></p></form>';
+    content.appendChild(section);
+    var form=section.querySelector('form');
+    form.addEventListener('submit',async function(event){
+      event.preventDefault();
+      var status=section.querySelector('.odd-form-status');
+      var button=form.querySelector('button');
+      status.textContent='Sending...';button.disabled=true;
+      try{
+        var response=await fetch('/api/lead',{method:'POST',body:new FormData(form)});
+        var result=await response.json();
+        if(!response.ok||!result.ok)throw new Error(result.error||'Unable to send request.');
+        status.textContent=result.message||'Thanks — your request was received.';form.reset();
+      }catch(error){status.textContent=(error&&error.message)||'Please call (435) 222-5819.';}
+      finally{button.disabled=false;}
+    });
+  }
+
+  function run(){pruneLegacyNavigation();improveControls();restoreContactPage();document.documentElement.classList.add('odd-optimized');}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
