@@ -4,10 +4,26 @@ class HeadInjector {
   }
 }
 
-class HomepageDeckoratorsImageFix {
+class ImagePathNormalizer {
   element(element) {
-    element.setAttribute('src', '/assets/hero.webp');
-    element.setAttribute('loading', 'eager');
+    const src = element.getAttribute('src');
+    if (!src || src.startsWith('data:') || src.startsWith('http://') || src.startsWith('https://')) return;
+
+    let fixed = src;
+
+    // The restored Weebly export converted local JPG/PNG files to WebP,
+    // while some HTML references retained the original extension.
+    fixed = fixed.replace(/\.(jpe?g|png)(\?.*)?$/i, '.webp$2');
+
+    // Some archived paths received a duplicated _orig suffix during export.
+    fixed = fixed
+      .replace(/_orig_orig\.webp(\?.*)?$/i, '_orig.webp$1')
+      .replace(/-orig_orig\.webp(\?.*)?$/i, '-orig.webp$1');
+
+    if (fixed !== src) {
+      element.setAttribute('src', fixed);
+    }
+
     element.setAttribute('decoding', 'async');
   }
 }
@@ -27,14 +43,8 @@ export async function onRequest(context) {
     return response;
   }
 
-  let rewriter = new HTMLRewriter().on('head', new HeadInjector());
-
-  if (url.pathname === '/' || url.pathname === '/index.html') {
-    rewriter = rewriter.on(
-      'img[src*="deckorators-voyage-line-by-ogden-deck-depot"]',
-      new HomepageDeckoratorsImageFix()
-    );
-  }
-
-  return rewriter.transform(response);
+  return new HTMLRewriter()
+    .on('head', new HeadInjector())
+    .on('img[src]', new ImagePathNormalizer())
+    .transform(response);
 }
