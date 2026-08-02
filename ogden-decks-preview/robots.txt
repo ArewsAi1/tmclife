@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /form-submissions.html
+Disallow: /confirmation.html
+Sitemap: https://www.ogdendecks.com/sitemap.xml
