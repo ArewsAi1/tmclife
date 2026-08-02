@@ -1,128 +1,35 @@
 const PAGE_META = {
-  '/': {
-    title: 'Decking Supply Store in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop composite decking, railing, lumber, fasteners and deck-building supplies in Ogden, Utah. Serving contractors and homeowners across Northern Utah.'
-  },
-  '/products-ogden-deck-depot.html': {
-    title: 'Decking, Railing & Deck Building Products | Ogden Deck Depot',
-    description: 'Browse Deckorators, TimberTech, Trex, Fiberon, railing, lumber, fasteners, footings and other professional deck-building products in Ogden, Utah.'
-  },
-  '/composite-decking-ogden.html': {
-    title: 'Composite Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Compare composite decking from Deckorators, TimberTech, Trex, Fiberon and other trusted brands at Ogden Deck Depot in Northern Utah.'
-  },
-  '/deckorators-decking.html': {
-    title: 'Deckorators Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop Deckorators composite decking collections and colors with local product guidance from Ogden Deck Depot in Ogden, Utah.'
-  },
-  '/timbertech-decking-ogden.html': {
-    title: 'TimberTech Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Explore TimberTech composite and PVC decking products available through Ogden Deck Depot for contractors and homeowners in Northern Utah.'
-  },
-  '/trex-deck-boards-for-sale-in-ogden-ut.html': {
-    title: 'Trex Deck Boards for Sale in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop Trex deck boards, fascia, accessories and railing locally through Ogden Deck Depot in Ogden, Utah.'
-  },
-  '/trex-fascia-boards-ogden.html': {
-    title: 'Trex Fascia Boards and Trim in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop Trex fascia boards and matching trim for clean deck edges and stair finishes through Ogden Deck Depot in Northern Utah.'
-  },
-  '/fiberon-decking.html': {
-    title: 'Fiberon Composite Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Explore Fiberon composite decking colors and collections with local material guidance and availability from Ogden Deck Depot in Northern Utah.'
-  },
-  '/deck-railing-ogden.html': {
-    title: 'Deck Railing Systems in Ogden, Utah | Ogden Deck Depot',
-    description: 'Compare steel, aluminum, cable, composite and vinyl deck railing systems at Ogden Deck Depot in Ogden, Utah.'
-  },
-  '/deck-design-ogden-deck-depot.html': {
-    title: 'Deck Design and Plans in Ogden, Utah | Ogden Deck Depot',
-    description: 'Get help with deck plans, permits, material takeoffs and project preparation through Ogden Deck Depot in Northern Utah.'
-  },
-  '/lumber-yard-929035.html': {
-    title: 'Deck Lumber and Framing Materials in Ogden, Utah',
-    description: 'Shop pressure-treated lumber, framing materials and deck-building supplies through Ogden Deck Depot in Northern Utah.'
-  },
-  '/ogden-deck-depot-helical-pier-pylon-deck-footing.html': {
-    title: 'Helical Pier Deck Footings in Ogden, Utah | Ogden Deck Depot',
-    description: 'Learn about helical pier and pylon deck footing options for stable foundations, faster installation and Northern Utah soil conditions.'
-  },
-  '/deck-upgrades.html': {
-    title: 'Deck Upgrades and Accessories in Ogden, Utah',
-    description: 'Explore deck lighting, drainage, shade, railing and outdoor-living upgrades available through Ogden Deck Depot in Northern Utah.'
-  },
-  '/ogden-deck-depot-timbertech-terrain-decking-boards-in-ogden-ut.html': {
-    title: 'TimberTech Terrain+ Decking Boards in Ogden, Utah',
-    description: 'Compare TimberTech Terrain+ decking colors, board options and local availability through Ogden Deck Depot in Northern Utah.'
-  },
-  '/deck-railing-534475-211181.html': {
-    title: 'Cinch Steel Deck Railing in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop Cinch steel deck railing components and get local product guidance from Ogden Deck Depot in Northern Utah.'
-  },
-  '/deckorators-venture-composite-decking-661275.html': {
-    title: 'Deckorators Venture Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Shop Deckorators Venture composite decking, compare colors and get local product guidance from Ogden Deck Depot in Northern Utah.'
-  },
-  '/deckorators-voyage-composite-decking.html': {
-    title: 'Deckorators Voyage Decking in Ogden, Utah | Ogden Deck Depot',
-    description: 'Explore Deckorators Voyage mineral-based composite decking colors and availability through Ogden Deck Depot in Northern Utah.'
-  },
-  '/saltwater-deckorators-vault-composite-decking-521015.html': {
-    title: 'Deckorators Venture Saltwater Decking | Ogden Deck Depot',
-    description: 'Shop Deckorators Venture Saltwater composite decking and compare local availability, pricing and matching materials in Northern Utah.'
-  },
-  '/venture-deckorators-venture-composite-decking-521015-163568.html': {
-    title: 'Deckorators Venture Sandbar Decking | Ogden Deck Depot',
-    description: 'Explore Deckorators Venture Sandbar composite decking with local product guidance, availability and project support from Ogden Deck Depot.'
-  },
-  '/mesa-deckorators-voyage-composite-decking.html': {
-    title: 'Deckorators Voyage Mesa Decking | Ogden Deck Depot',
-    description: 'Shop Deckorators Voyage Mesa mineral-based composite decking and get local availability and material guidance in Northern Utah.'
-  },
-  '/sierra-deckorators-voyage-composite-decking.html': {
-    title: 'Deckorators Voyage Sierra Decking | Ogden Deck Depot',
-    description: 'Explore Deckorators Voyage Sierra composite decking with local product availability and project guidance from Ogden Deck Depot.'
-  },
-  '/dark-slate-deckorators-voyage-composite-decking.html': {
-    title: 'Deckorators Voyage Dark Slate Decking | Ogden Deck Depot',
-    description: 'Shop Deckorators Voyage Dark Slate decking for borders, accents and full decks with local supply support in Northern Utah.'
-  },
-  '/timbertech-terrain-natural-white-oak-decking-in-ogden-ut.html': {
-    title: 'TimberTech Natural White Oak Decking in Ogden, Utah',
-    description: 'Shop TimberTech Terrain+ Natural White Oak decking locally through Ogden Deck Depot for projects across Northern Utah.'
-  },
-  '/zip-up-underdeck-ceilings-lighting-ogden.html': {
-    title: 'Zip-Up Underdeck Ceiling Systems in Ogden, Utah',
-    description: 'Explore Zip-Up underdeck ceiling panels and lighting options from Ogden Deck Depot for dry, finished outdoor spaces in Northern Utah.'
-  },
-  '/product-gallery.html': {
-    title: 'Decking and Railing Product Gallery | Ogden Deck Depot',
-    description: 'Browse decking, railing and outdoor-building product examples available through Ogden Deck Depot in Ogden, Utah.'
-  },
-  '/premium-decking-supply-for-eden-utah.html': {
-    title: 'Decking Supply for Eden, Utah | Ogden Deck Depot',
-    description: 'Shop composite decking, railing, framing materials and deck-building supplies for Eden, Utah projects through Ogden Deck Depot.'
-  },
-  '/decking-supply-huntsville-utah.html': {
-    title: 'Decking Supply for Huntsville, Utah | Ogden Deck Depot',
-    description: 'Get composite decking, railing, lumber and deck-building materials for Huntsville, Utah from Ogden Deck Depot.'
-  },
-  '/decking-supply-layton-utah.html': {
-    title: 'Decking Supply for Layton, Utah | Ogden Deck Depot',
-    description: 'Shop decking, railing, lumber and professional deck-building supplies for Layton, Utah projects through Ogden Deck Depot.'
-  },
-  '/decking-supply-kaysville-utah.html': {
-    title: 'Decking Supply for Kaysville, Utah | Ogden Deck Depot',
-    description: 'Find composite decking, railing, lumber and deck-building materials for Kaysville, Utah at Ogden Deck Depot.'
-  },
-  '/contact.html': {
-    title: 'Contact Ogden Deck Depot | Decking Supply in Ogden, Utah',
-    description: 'Contact Ogden Deck Depot for product availability, decking quotes and help choosing deck-building materials in Northern Utah.'
-  },
-  '/about.html': {
-    title: 'About Ogden Deck Depot | Northern Utah Decking Supplier',
-    description: 'Learn about Ogden Deck Depot, a local source for decking, railing, lumber and professional deck-building supplies in Northern Utah.'
-  }
+  '/': { title: 'Decking Supply Store in Ogden, Utah | Ogden Deck Depot', description: 'Shop composite decking, railing, lumber, fasteners and deck-building supplies in Ogden, Utah. Serving contractors and homeowners across Northern Utah.' },
+  '/products-ogden-deck-depot.html': { title: 'Decking, Railing & Deck Building Products | Ogden Deck Depot', description: 'Browse Deckorators, TimberTech, Trex, Fiberon, railing, lumber, fasteners, footings and other professional deck-building products in Ogden, Utah.' },
+  '/composite-decking-ogden.html': { title: 'Composite Decking in Ogden, Utah | Ogden Deck Depot', description: 'Compare composite decking from Deckorators, TimberTech, Trex, Fiberon and other trusted brands at Ogden Deck Depot in Northern Utah.' },
+  '/deckorators-decking.html': { title: 'Deckorators Decking in Ogden, Utah | Ogden Deck Depot', description: 'Shop Deckorators composite decking collections and colors with local product guidance from Ogden Deck Depot in Ogden, Utah.' },
+  '/timbertech-decking-ogden.html': { title: 'TimberTech Decking in Ogden, Utah | Ogden Deck Depot', description: 'Explore TimberTech composite and PVC decking products available through Ogden Deck Depot for contractors and homeowners in Northern Utah.' },
+  '/trex-deck-boards-for-sale-in-ogden-ut.html': { title: 'Trex Deck Boards for Sale in Ogden, Utah | Ogden Deck Depot', description: 'Shop Trex deck boards, fascia, accessories and railing locally through Ogden Deck Depot in Ogden, Utah.' },
+  '/trex-fascia-boards-ogden.html': { title: 'Trex Fascia Boards and Trim in Ogden, Utah | Ogden Deck Depot', description: 'Shop Trex fascia boards and matching trim for clean deck edges and stair finishes through Ogden Deck Depot in Northern Utah.' },
+  '/fiberon-decking.html': { title: 'Fiberon Composite Decking in Ogden, Utah | Ogden Deck Depot', description: 'Explore Fiberon composite decking colors and collections with local material guidance and availability from Ogden Deck Depot in Northern Utah.' },
+  '/deck-railing-ogden.html': { title: 'Deck Railing Systems in Ogden, Utah | Ogden Deck Depot', description: 'Compare steel, aluminum, cable, composite and vinyl deck railing systems at Ogden Deck Depot in Ogden, Utah.' },
+  '/deck-design-ogden-deck-depot.html': { title: 'Deck Design and Plans in Ogden, Utah | Ogden Deck Depot', description: 'Get help with deck plans, permits, material takeoffs and project preparation through Ogden Deck Depot in Northern Utah.' },
+  '/lumber-yard-929035.html': { title: 'Deck Lumber and Framing Materials in Ogden, Utah', description: 'Shop pressure-treated lumber, framing materials and deck-building supplies through Ogden Deck Depot in Northern Utah.' },
+  '/ogden-deck-depot-helical-pier-pylon-deck-footing.html': { title: 'Helical Pier Deck Footings in Ogden, Utah | Ogden Deck Depot', description: 'Learn about helical pier and pylon deck footing options for stable foundations, faster installation and Northern Utah soil conditions.' },
+  '/deck-upgrades.html': { title: 'Deck Upgrades and Accessories in Ogden, Utah', description: 'Explore deck lighting, drainage, shade, railing and outdoor-living upgrades available through Ogden Deck Depot in Northern Utah.' },
+  '/ogden-deck-depot-timbertech-terrain-decking-boards-in-ogden-ut.html': { title: 'TimberTech Terrain+ Decking Boards in Ogden, Utah', description: 'Compare TimberTech Terrain+ decking colors, board options and local availability through Ogden Deck Depot in Northern Utah.' },
+  '/deck-railing-534475-211181.html': { title: 'Cinch Steel Deck Railing in Ogden, Utah | Ogden Deck Depot', description: 'Shop Cinch steel deck railing components and get local product guidance from Ogden Deck Depot in Northern Utah.' },
+  '/deckorators-venture-composite-decking-661275.html': { title: 'Deckorators Venture Decking in Ogden, Utah | Ogden Deck Depot', description: 'Shop Deckorators Venture composite decking, compare colors and get local product guidance from Ogden Deck Depot in Northern Utah.' },
+  '/deckorators-voyage-composite-decking.html': { title: 'Deckorators Voyage Decking in Ogden, Utah | Ogden Deck Depot', description: 'Explore Deckorators Voyage mineral-based composite decking colors and availability through Ogden Deck Depot in Northern Utah.' },
+  '/saltwater-deckorators-vault-composite-decking-521015.html': { title: 'Deckorators Venture Saltwater Decking | Ogden Deck Depot', description: 'Shop Deckorators Venture Saltwater composite decking and compare local availability, pricing and matching materials in Northern Utah.' },
+  '/venture-deckorators-venture-composite-decking-521015-163568.html': { title: 'Deckorators Venture Sandbar Decking | Ogden Deck Depot', description: 'Explore Deckorators Venture Sandbar composite decking with local product guidance, availability and project support from Ogden Deck Depot.' },
+  '/mesa-deckorators-voyage-composite-decking.html': { title: 'Deckorators Voyage Mesa Decking | Ogden Deck Depot', description: 'Shop Deckorators Voyage Mesa mineral-based composite decking and get local availability and material guidance in Northern Utah.' },
+  '/sierra-deckorators-voyage-composite-decking.html': { title: 'Deckorators Voyage Sierra Decking | Ogden Deck Depot', description: 'Explore Deckorators Voyage Sierra composite decking with local product availability and project guidance from Ogden Deck Depot.' },
+  '/dark-slate-deckorators-voyage-composite-decking.html': { title: 'Deckorators Voyage Dark Slate Decking | Ogden Deck Depot', description: 'Shop Deckorators Voyage Dark Slate decking for borders, accents and full decks with local supply support in Northern Utah.' },
+  '/timbertech-terrain-natural-white-oak-decking-in-ogden-ut.html': { title: 'TimberTech Natural White Oak Decking in Ogden, Utah', description: 'Shop TimberTech Terrain+ Natural White Oak decking locally through Ogden Deck Depot for projects across Northern Utah.' },
+  '/zip-up-underdeck-ceilings-lighting-ogden.html': { title: 'Zip-Up Underdeck Ceiling Systems in Ogden, Utah', description: 'Explore Zip-Up underdeck ceiling panels and lighting options from Ogden Deck Depot for dry, finished outdoor spaces in Northern Utah.' },
+  '/product-gallery.html': { title: 'Decking and Railing Product Gallery | Ogden Deck Depot', description: 'Browse decking, railing and outdoor-building product examples available through Ogden Deck Depot in Ogden, Utah.' },
+  '/premium-decking-supply-for-eden-utah.html': { title: 'Decking Supply for Eden, Utah | Ogden Deck Depot', description: 'Shop composite decking, railing, framing materials and deck-building supplies for Eden, Utah projects through Ogden Deck Depot.' },
+  '/decking-supply-huntsville-utah.html': { title: 'Decking Supply for Huntsville, Utah | Ogden Deck Depot', description: 'Get composite decking, railing, lumber and deck-building materials for Huntsville, Utah from Ogden Deck Depot.' },
+  '/decking-supply-layton-utah.html': { title: 'Decking Supply for Layton, Utah | Ogden Deck Depot', description: 'Shop decking, railing, lumber and professional deck-building supplies for Layton, Utah projects through Ogden Deck Depot.' },
+  '/decking-supply-kaysville-utah.html': { title: 'Decking Supply for Kaysville, Utah | Ogden Deck Depot', description: 'Find composite decking, railing, lumber and deck-building materials for Kaysville, Utah at Ogden Deck Depot.' },
+  '/contact.html': { title: 'Contact Ogden Deck Depot | Decking Supply in Ogden, Utah', description: 'Contact Ogden Deck Depot for product availability, decking quotes and help choosing deck-building materials in Northern Utah.' },
+  '/about.html': { title: 'About Ogden Deck Depot | Northern Utah Decking Supplier', description: 'Learn about Ogden Deck Depot, a local source for decking, railing, lumber and professional deck-building supplies in Northern Utah.' }
 };
 
 const LEGACY_LINKS = {
@@ -131,154 +38,57 @@ const LEGACY_LINKS = {
   '/deck-lumber.html': '/lumber-yard-929035.html',
   '/deck-supplier-ogden-ut-gmb-stack.html': '/service-areas.html'
 };
-
-const ASSET_VERSION = '20260802-4';
+const ASSET_VERSION = '20260802-5';
 
 class HeadInjector {
-  constructor(canonicalUrl, isHome, meta) {
-    this.canonicalUrl = canonicalUrl;
-    this.isHome = isHome;
-    this.meta = meta;
-  }
-
-  element(element) {
-    element.append('<link rel="stylesheet" href="/weebly-restore.css?v=' + ASSET_VERSION + '">', { html: true });
-    element.append('<link rel="stylesheet" href="/site-optimizer.css?v=' + ASSET_VERSION + '">', { html: true });
-    element.append('<script src="/site-optimizer.js?v=' + ASSET_VERSION + '" defer></script>', { html: true });
-    element.append('<link rel="canonical" href="' + this.canonicalUrl + '">', { html: true });
-    element.append('<meta name="theme-color" content="#111111">', { html: true });
-    element.append('<link rel="preconnect" href="https://cdn11.editmysite.com" crossorigin>', { html: true });
-    element.append('<link rel="preconnect" href="https://cdn2.editmysite.com" crossorigin>', { html: true });
-
-    if (this.meta) {
-      element.append('<title>' + this.meta.title + '</title>', { html: true });
-      element.append('<meta name="description" content="' + this.meta.description + '">', { html: true });
-      element.append('<meta property="og:title" content="' + this.meta.title + '">', { html: true });
-      element.append('<meta property="og:description" content="' + this.meta.description + '">', { html: true });
-      element.append('<meta property="og:type" content="website">', { html: true });
-      element.append('<meta property="og:url" content="' + this.canonicalUrl + '">', { html: true });
-      element.append('<meta name="twitter:card" content="summary_large_image">', { html: true });
+  constructor(canonicalUrl,isHome,meta){this.canonicalUrl=canonicalUrl;this.isHome=isHome;this.meta=meta;}
+  element(element){
+    element.append('<link rel="stylesheet" href="/weebly-restore.css?v='+ASSET_VERSION+'">',{html:true});
+    element.append('<link rel="stylesheet" href="/site-optimizer.css?v='+ASSET_VERSION+'">',{html:true});
+    element.append('<script src="/site-optimizer.js?v='+ASSET_VERSION+'" defer></script>',{html:true});
+    element.append('<link rel="canonical" href="'+this.canonicalUrl+'">',{html:true});
+    element.append('<meta name="theme-color" content="#111111">',{html:true});
+    element.append('<link rel="preconnect" href="https://cdn11.editmysite.com" crossorigin>',{html:true});
+    element.append('<link rel="preconnect" href="https://cdn2.editmysite.com" crossorigin>',{html:true});
+    if(this.meta){
+      element.append('<title>'+this.meta.title+'</title>',{html:true});
+      element.append('<meta name="description" content="'+this.meta.description+'">',{html:true});
+      element.append('<meta property="og:title" content="'+this.meta.title+'">',{html:true});
+      element.append('<meta property="og:description" content="'+this.meta.description+'">',{html:true});
+      element.append('<meta property="og:type" content="website">',{html:true});
+      element.append('<meta property="og:url" content="'+this.canonicalUrl+'">',{html:true});
+      element.append('<meta name="twitter:card" content="summary_large_image">',{html:true});
     }
-
-    if (this.isHome) {
-      const schema = {
-        '@context': 'https://schema.org',
-        '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
-        '@id': 'https://www.ogdendeckdepot.com/#business',
-        name: 'Ogden Deck Depot',
-        url: 'https://www.ogdendeckdepot.com/',
-        telephone: '+1-435-222-5819',
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: '190 W 33rd Street #160',
-          addressLocality: 'Ogden',
-          addressRegion: 'UT',
-          postalCode: '84401',
-          addressCountry: 'US'
-        },
-        areaServed: ['Ogden', 'Weber County', 'Davis County', 'Northern Utah']
-      };
-      element.append('<script type="application/ld+json">' + JSON.stringify(schema) + '</script>', { html: true });
+    if(this.isHome){
+      const schema={'@context':'https://schema.org','@type':['LocalBusiness','HomeAndConstructionBusiness'],'@id':'https://www.ogdendeckdepot.com/#business',name:'Ogden Deck Depot',url:'https://www.ogdendeckdepot.com/',telephone:'+1-435-222-5819',address:{'@type':'PostalAddress',streetAddress:'190 W 33rd Street #160',addressLocality:'Ogden',addressRegion:'UT',postalCode:'84401',addressCountry:'US'},areaServed:['Ogden','Weber County','Davis County','Northern Utah']};
+      element.append('<script type="application/ld+json">'+JSON.stringify(schema)+'</script>',{html:true});
     }
   }
 }
-
-class RemoveElement {
-  element(element) {
-    element.remove();
+class RemoveElement{element(element){element.remove();}}
+class ImageOptimizer{
+  constructor(){this.count=0;}
+  element(element){
+    this.count+=1;const src=element.getAttribute('src');if(!src||src.startsWith('data:'))return;
+    element.setAttribute('decoding','async');
+    if(this.count<=2){element.setAttribute('loading','eager');element.setAttribute('fetchpriority','high');}
+    else{element.setAttribute('loading','lazy');element.setAttribute('fetchpriority','low');}
+    if(!element.getAttribute('alt')){const clean=src.split('/').pop().split('?')[0].replace(/\.(webp|jpe?g|png|gif|svg)$/i,'').replace(/[-_]+/g,' ').replace(/\borig\b/gi,'').replace(/\s+/g,' ').trim();element.setAttribute('alt',clean||'Ogden Deck Depot decking product');}
   }
 }
-
-class ImageOptimizer {
-  constructor() {
-    this.count = 0;
-  }
-
-  element(element) {
-    this.count += 1;
-    const src = element.getAttribute('src');
-    if (!src || src.startsWith('data:')) return;
-
-    element.setAttribute('decoding', 'async');
-    if (this.count <= 2) {
-      element.setAttribute('loading', 'eager');
-      element.setAttribute('fetchpriority', 'high');
-    } else {
-      element.setAttribute('loading', 'lazy');
-      element.setAttribute('fetchpriority', 'low');
-    }
-
-    if (!element.getAttribute('alt')) {
-      const clean = src.split('/').pop().split('?')[0]
-        .replace(/\.(webp|jpe?g|png|gif|svg)$/i, '')
-        .replace(/[-_]+/g, ' ')
-        .replace(/\borig\b/gi, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-      element.setAttribute('alt', clean || 'Ogden Deck Depot decking product');
-    }
+class LinkNormalizer{
+  element(element){
+    const href=element.getAttribute('href');if(!href)return;
+    try{const parsed=new URL(href,'https://www.ogdendeckdepot.com');if(LEGACY_LINKS[parsed.pathname]){parsed.pathname=LEGACY_LINKS[parsed.pathname];element.setAttribute('href',parsed.pathname+parsed.search+parsed.hash);}else if(parsed.hostname==='ogdendeckdepot.com'){parsed.hostname='www.ogdendeckdepot.com';parsed.protocol='https:';element.setAttribute('href',parsed.toString());}}catch(_){}
+    if(element.getAttribute('target')==='_blank'){const rel=new Set((element.getAttribute('rel')||'').split(/\s+/).filter(Boolean));rel.add('noopener');rel.add('noreferrer');element.setAttribute('rel',Array.from(rel).join(' '));}
   }
 }
-
-class LinkNormalizer {
-  element(element) {
-    const href = element.getAttribute('href');
-    if (!href) return;
-
-    try {
-      const parsed = new URL(href, 'https://www.ogdendeckdepot.com');
-      if (LEGACY_LINKS[parsed.pathname]) {
-        parsed.pathname = LEGACY_LINKS[parsed.pathname];
-        element.setAttribute('href', parsed.pathname + parsed.search + parsed.hash);
-      } else if (parsed.hostname === 'ogdendeckdepot.com') {
-        parsed.hostname = 'www.ogdendeckdepot.com';
-        parsed.protocol = 'https:';
-        element.setAttribute('href', parsed.toString());
-      }
-    } catch (_) {}
-
-    if (element.getAttribute('target') === '_blank') {
-      const rel = new Set((element.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
-      rel.add('noopener');
-      rel.add('noreferrer');
-      element.setAttribute('rel', Array.from(rel).join(' '));
-    }
-  }
-}
-
-export async function onRequest(context) {
-  const url = new URL(context.request.url);
-
-  if (url.hostname === 'ogdendeckdepot.com') {
-    url.hostname = 'www.ogdendeckdepot.com';
-    return Response.redirect(url.toString(), 301);
-  }
-
-  const response = await context.next();
-  const contentType = response.headers.get('content-type') || '';
-  if (!contentType.includes('text/html')) return response;
-
-  const isHome = url.pathname === '/' || url.pathname === '/index.html';
-  const normalizedPath = isHome ? '/' : url.pathname;
-  const canonicalUrl = 'https://www.ogdendeckdepot.com' + normalizedPath;
-  const meta = PAGE_META[normalizedPath] || PAGE_META[normalizedPath + '.html'];
-
-  let rewriter = new HTMLRewriter()
-    .on('link[rel="canonical"]', new RemoveElement())
-    .on('meta[name="keywords"]', new RemoveElement())
-    .on('.wsite-menu-wrap .wsite-menu-wrap', new RemoveElement())
-    .on('head', new HeadInjector(canonicalUrl, isHome, meta))
-    .on('img[src]', new ImageOptimizer())
-    .on('a[href]', new LinkNormalizer());
-
-  if (meta) {
-    rewriter = rewriter
-      .on('title', new RemoveElement())
-      .on('meta[name="description"]', new RemoveElement())
-      .on('meta[property="og:title"]', new RemoveElement())
-      .on('meta[property="og:description"]', new RemoveElement())
-      .on('meta[property="og:url"]', new RemoveElement());
-  }
-
+export async function onRequest(context){
+  const url=new URL(context.request.url);
+  if(url.hostname==='ogdendeckdepot.com'){url.hostname='www.ogdendeckdepot.com';return Response.redirect(url.toString(),301);}
+  const response=await context.next();const contentType=response.headers.get('content-type')||'';if(!contentType.includes('text/html'))return response;
+  const isHome=url.pathname==='/'||url.pathname==='/index.html';const normalizedPath=isHome?'/':url.pathname;const canonicalUrl='https://www.ogdendeckdepot.com'+normalizedPath;const meta=PAGE_META[normalizedPath]||PAGE_META[normalizedPath+'.html'];
+  let rewriter=new HTMLRewriter().on('link[rel="canonical"]',new RemoveElement()).on('meta[name="keywords"]',new RemoveElement()).on('.wsite-menu-wrap .wsite-menu-wrap',new RemoveElement()).on('head',new HeadInjector(canonicalUrl,isHome,meta)).on('img[src]',new ImageOptimizer()).on('a[href]',new LinkNormalizer());
+  if(meta){rewriter=rewriter.on('title',new RemoveElement()).on('meta[name="description"]',new RemoveElement()).on('meta[property="og:title"]',new RemoveElement()).on('meta[property="og:description"]',new RemoveElement()).on('meta[property="og:url"]',new RemoveElement());}
   return rewriter.transform(response);
 }
