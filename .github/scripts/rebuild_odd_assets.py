@@ -33,15 +33,25 @@ for p in text_files:
     text = p.read_text(errors='ignore')
     original = text
     for old, new in conversion.items():
-        for a, b in ((old, new), ('/' + old, '/' + new), (old.replace(' ', '%20'), new.replace(' ', '%20')), (('/' + old).replace(' ', '%20'), ('/' + new).replace(' ', '%20'))):
+        variants = (
+            (old, new), ('/' + old, '/' + new),
+            (old.replace(' ', '%20'), new.replace(' ', '%20')),
+            (('/' + old).replace(' ', '%20'), ('/' + new).replace(' ', '%20')),
+        )
+        for a, b in variants:
             text = text.replace(a, b)
     if text != original:
         p.write_text(text)
 
 def norm_stem(path):
     stem = Path(path).stem.lower()
-    stem = re.sub(r'_(orig|\d+)$', '', stem)
-    return re.sub(r'[^a-z0-9]+', '-', stem).strip('-')
+    stem = re.sub(r'_(orig|original|copy|\d+)$', '', stem)
+    stem = re.sub(r'[-_](orig|original|copy)$', '', stem)
+    stem = re.sub(r'[-_]\d+$', '', stem)
+    stem = re.sub(r'[-_](jpg|jpeg|png|webp)$', '', stem)
+    stem = re.sub(r'[^a-z0-9]+', '-', stem).strip('-')
+    stem = re.sub(r'-\d+$', '', stem)
+    return stem
 
 image_files = [p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in image_exts]
 by_stem = {}
@@ -58,6 +68,17 @@ def resolve_target(page, clean):
         return root / clean, True
     return page.parent / clean, False
 
+def choose_candidate(clean):
+    key = norm_stem(clean)
+    candidates = by_stem.get(key, [])
+    if not candidates:
+        return None
+    return sorted(candidates, key=lambda x: (
+        0 if 'uploads' in x.parts else 1,
+        0 if norm_stem(x.name) == key else 1,
+        len(x.as_posix())
+    ))[0]
+
 for p in text_files:
     text = p.read_text(errors='ignore')
     def replace(match):
@@ -69,10 +90,9 @@ for p in text_files:
         target, root_style = resolve_target(p, clean)
         if target.exists():
             return match.group(0)
-        candidates = by_stem.get(norm_stem(clean), [])
-        if not candidates:
+        candidate = choose_candidate(clean)
+        if candidate is None:
             return match.group(0)
-        candidate = sorted(candidates, key=lambda x: (0 if 'uploads' in x.parts else 1, len(x.as_posix())))[0]
         new = '/' + candidate.relative_to(root).as_posix() if root_style else os.path.relpath(candidate, p.parent).replace(os.sep, '/')
         repaired[0] += 1
         return match.group('q') + new
