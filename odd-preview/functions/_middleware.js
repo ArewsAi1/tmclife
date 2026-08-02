@@ -200,7 +200,7 @@ export async function onRequest(context) {
   const isHome = url.pathname === '/' || url.pathname === '/index.html';
   const normalizedPath = isHome ? '/' : url.pathname;
   const canonicalUrl = 'https://www.ogdendeckdepot.com' + normalizedPath;
-  const meta = PAGE_META[normalizedPath];
+  const meta = PAGE_META[normalizedPath] || PAGE_META[normalizedPath + '.html'];
 
   let rewriter = new HTMLRewriter()
     .on('link[rel="canonical"]', new RemoveElement())
