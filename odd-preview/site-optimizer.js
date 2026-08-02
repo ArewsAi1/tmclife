@@ -3,6 +3,28 @@
     try{return new URL(value,location.href).pathname.replace(/^\//,'').replace(/\/$/,'').toLowerCase();}catch(_){return '';}
   }
 
+  function normalizeTopNavigation(){
+    var routes={
+      'home':'https://www.ogdendeckdepot.com/',
+      'shop now':'https://ogdendeckdepot.shop.ruckdelivery.com/?utm_source=ogdendeckdepot&utm_medium=header_nav&utm_campaign=shop&utm_content=header_shop_button',
+      'our products':'https://www.ogdendeckdepot.com/products-ogden-deck-depot.html',
+      'about':'https://www.ogdendeckdepot.com/about.html',
+      'service area':'https://www.ogdendeckdepot.com/service-areas.html',
+      'blog':'https://www.ogdendeckdepot.com/blog.html',
+      'write a review':'https://bit.ly/3bNtmAJ',
+      'other construction products':'https://www.ogdendeckdepot.com/other-products.html',
+      'media room':'https://www.ogdendeckdepot.com/contact.html'
+    };
+    document.querySelectorAll('.nav > ul > li > a,.wsite-menu-default > li > a').forEach(function(link){
+      var key=(link.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
+      if(routes[key]){
+        link.setAttribute('href',routes[key]);
+        link.onclick=null;
+        link.removeAttribute('data-membership-required');
+      }
+    });
+  }
+
   function pruneLegacyNavigation(){
     var links=document.querySelectorAll('.nav a,.wsite-menu a');
     links.forEach(function(link){
@@ -55,9 +77,7 @@
     var content=document.querySelector('#wsite-content,.main-wrap .container,.wsite-section-elements');
     if(!content)return;
     Array.from(content.querySelectorAll('h1,h2,h3,div.paragraph,p')).forEach(function(el){
-      if((el.textContent||'').trim().toLowerCase()==='under construction'){
-        el.textContent='Contact Ogden Deck Depot';
-      }
+      if((el.textContent||'').trim().toLowerCase()==='under construction')el.textContent='Contact Ogden Deck Depot';
     });
     if(document.getElementById('odd-contact-form'))return;
     var section=document.createElement('section');
@@ -81,6 +101,6 @@
     });
   }
 
-  function run(){pruneLegacyNavigation();improveControls();restoreContactPage();document.documentElement.classList.add('odd-optimized');}
+  function run(){normalizeTopNavigation();pruneLegacyNavigation();improveControls();restoreContactPage();document.documentElement.classList.add('odd-optimized');}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
