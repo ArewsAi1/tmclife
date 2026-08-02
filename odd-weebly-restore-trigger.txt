@@ -1,2 +1,3 @@
 Trigger exact Ogden Deck Depot Weebly restoration from the original archived export.
 Repair pass: restore missing image aliases and original theme CDN styling.
+Repair pass 2: fix homepage hero/content images and restore the original light header.
