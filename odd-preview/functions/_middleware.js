@@ -32,12 +32,24 @@ const PAGE_META = {
   '/about.html': { title: 'About Ogden Deck Depot | Northern Utah Decking Supplier', description: 'Learn about Ogden Deck Depot, a local source for decking, railing, lumber and professional deck-building supplies in Northern Utah.' }
 };
 const LEGACY_LINKS = {
+  '/index.html': '/',
+  '/home.html': '/',
+  '/products.html': '/products-ogden-deck-depot.html',
   '/decking-composite.html': '/composite-decking-ogden.html',
   '/deck-footings-ogden.html': '/ogden-deck-depot-helical-pier-pylon-deck-footing.html',
   '/deck-lumber.html': '/lumber-yard-929035.html',
-  '/deck-supplier-ogden-ut-gmb-stack.html': '/service-areas.html'
+  '/deck-supplier-ogden-ut-gmb-stack.html': '/service-areas.html',
+  '/ogden-ut.html': '/service-areas.html',
+  '/other-construction-products.html': '/other-products.html',
+  '/pergolas--awnings.html': '/other-products.html',
+  '/deck-features-and-accessories.html': '/other-products.html',
+  '/simpson-strong-tie.html': '/simpson-strong-tie-lu210-mount-joist-hanger-206311-927519-771247-485754-191033.html',
+  '/trex-rainescape-ogden-deck-depot.html': '/zip-up-underdeck-ceilings-lighting-ogden.html',
+  '/media-room.html': '/contact.html',
+  '/material-sales-lead-form.html': '/contact.html',
+  '/form-submission.html': '/forms.html'
 };
-const ASSET_VERSION = '20260802-5';
+const ASSET_VERSION = '20260802-6';
 class HeadInjector {
   constructor(canonicalUrl,isHome,meta){this.canonicalUrl=canonicalUrl;this.isHome=isHome;this.meta=meta;}
   element(element){
@@ -62,5 +74,5 @@ class HeadInjector {
 }
 class RemoveElement{element(element){element.remove();}}
 class ImageOptimizer{constructor(){this.count=0;}element(element){this.count+=1;const src=element.getAttribute('src');if(!src||src.startsWith('data:'))return;element.setAttribute('decoding','async');if(this.count<=2){element.setAttribute('loading','eager');element.setAttribute('fetchpriority','high');}else{element.setAttribute('loading','lazy');element.setAttribute('fetchpriority','low');}if(!element.getAttribute('alt')){const clean=src.split('/').pop().split('?')[0].replace(/\.(webp|jpe?g|png|gif|svg)$/i,'').replace(/[-_]+/g,' ').replace(/\borig\b/gi,'').replace(/\s+/g,' ').trim();element.setAttribute('alt',clean||'Ogden Deck Depot decking product');}}}
-class LinkNormalizer{element(element){const href=element.getAttribute('href');if(!href)return;try{const parsed=new URL(href,'https://www.ogdendeckdepot.com');if(LEGACY_LINKS[parsed.pathname]){parsed.pathname=LEGACY_LINKS[parsed.pathname];element.setAttribute('href',parsed.pathname+parsed.search+parsed.hash);}else if(parsed.hostname==='ogdendeckdepot.com'){parsed.hostname='www.ogdendeckdepot.com';parsed.protocol='https:';element.setAttribute('href',parsed.toString());}}catch(_){}if(element.getAttribute('target')==='_blank'){const rel=new Set((element.getAttribute('rel')||'').split(/\s+/).filter(Boolean));rel.add('noopener');rel.add('noreferrer');element.setAttribute('rel',Array.from(rel).join(' '));}}}
+class LinkNormalizer{element(element){const href=element.getAttribute('href');if(!href)return;try{const parsed=new URL(href,'https://www.ogdendeckdepot.com');if(LEGACY_LINKS[parsed.pathname]){parsed.pathname=LEGACY_LINKS[parsed.pathname];parsed.hostname='www.ogdendeckdepot.com';parsed.protocol='https:';element.setAttribute('href',parsed.toString());}else if(parsed.hostname==='ogdendeckdepot.com'){parsed.hostname='www.ogdendeckdepot.com';parsed.protocol='https:';element.setAttribute('href',parsed.toString());}}catch(_){}if(element.getAttribute('target')==='_blank'){const rel=new Set((element.getAttribute('rel')||'').split(/\s+/).filter(Boolean));rel.add('noopener');rel.add('noreferrer');element.setAttribute('rel',Array.from(rel).join(' '));}}}
 export async function onRequest(context){const url=new URL(context.request.url);if(url.hostname==='ogdendeckdepot.com'){url.hostname='www.ogdendeckdepot.com';return Response.redirect(url.toString(),301);}const response=await context.next();const contentType=response.headers.get('content-type')||'';if(!contentType.includes('text/html'))return response;const isHome=url.pathname==='/'||url.pathname==='/index.html';const normalizedPath=isHome?'/':url.pathname;const canonicalUrl='https://www.ogdendeckdepot.com'+normalizedPath;const meta=PAGE_META[normalizedPath]||PAGE_META[normalizedPath+'.html'];let rewriter=new HTMLRewriter().on('link[rel="canonical"]',new RemoveElement()).on('meta[name="keywords"]',new RemoveElement()).on('.wsite-menu-wrap .wsite-menu-wrap',new RemoveElement()).on('head',new HeadInjector(canonicalUrl,isHome,meta)).on('img[src]',new ImageOptimizer()).on('a[href]',new LinkNormalizer());if(meta){rewriter=rewriter.on('title',new RemoveElement()).on('meta[name="description"]',new RemoveElement()).on('meta[property="og:title"]',new RemoveElement()).on('meta[property="og:description"]',new RemoveElement()).on('meta[property="og:url"]',new RemoveElement());}return rewriter.transform(response);}
