@@ -1,8 +1,12 @@
 name: Rebuild Ogden Deck Depot Assets
 
 on:
-  pull_request:
+  push:
     branches: [main]
+    paths:
+      - 'odd-rebuild-trigger-2026-08-02.txt'
+      - '.github/workflows/rebuild-odd-assets.yml'
+      - '.github/scripts/rebuild_odd_assets.py'
   workflow_dispatch:
 
 permissions:
