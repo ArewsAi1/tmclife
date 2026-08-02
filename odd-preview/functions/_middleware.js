@@ -165,6 +165,7 @@ export async function onRequest(context) {
   let rewriter = new HTMLRewriter()
     .on('link[rel="canonical"]', new RemoveElement())
     .on('meta[name="keywords"]', new RemoveElement())
+    .on('ul.wsite-menu ul.wsite-menu ul.wsite-menu', new RemoveElement())
     .on('head', new HeadInjector(canonicalUrl, isHome, meta))
     .on('img[src]', new ImageOptimizer())
     .on('a[href]', new LinkNormalizer());
