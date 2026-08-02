@@ -25,6 +25,42 @@
     });
   }
 
+  function normalizeAllInternalLinks(){
+    var canonical={
+      'index.html':'/',
+      'home.html':'/',
+      'products.html':'/products-ogden-deck-depot.html',
+      'decking-composite.html':'/composite-decking-ogden.html',
+      'deck-footings-ogden.html':'/ogden-deck-depot-helical-pier-pylon-deck-footing.html',
+      'deck-lumber.html':'/lumber-yard-929035.html',
+      'deck-supplier-ogden-ut-gmb-stack.html':'/service-areas.html',
+      'ogden-ut.html':'/service-areas.html',
+      'other-construction-products.html':'/other-products.html',
+      'pergolas--awnings.html':'/other-products.html',
+      'deck-features-and-accessories.html':'/other-products.html',
+      'simpson-strong-tie.html':'/simpson-strong-tie-lu210-mount-joist-hanger-206311-927519-771247-485754-191033.html',
+      'trex-rainescape-ogden-deck-depot.html':'/zip-up-underdeck-ceilings-lighting-ogden.html',
+      'media-room.html':'/contact.html',
+      'material-sales-lead-form.html':'/contact.html',
+      'form-submission.html':'/forms.html'
+    };
+    document.querySelectorAll('a[href]').forEach(function(link){
+      var raw=link.getAttribute('href')||'';
+      if(!raw||raw.charAt(0)==='#'||raw.indexOf('tel:')===0||raw.indexOf('mailto:')===0||raw.indexOf('javascript:')===0)return;
+      try{
+        var url=new URL(raw,location.href);
+        if(url.hostname==='ogdendeckdepot.com')url.hostname='www.ogdendeckdepot.com';
+        if(url.hostname!=='www.ogdendeckdepot.com')return;
+        var key=url.pathname.replace(/^\//,'').toLowerCase();
+        if(canonical[key])url.pathname=canonical[key];
+        url.protocol='https:';
+        link.setAttribute('href',url.toString());
+        link.onclick=null;
+        link.removeAttribute('data-membership-required');
+      }catch(_){}
+    });
+  }
+
   function pruneLegacyNavigation(){
     var links=document.querySelectorAll('.nav a,.wsite-menu a');
     links.forEach(function(link){
@@ -101,6 +137,6 @@
     });
   }
 
-  function run(){normalizeTopNavigation();pruneLegacyNavigation();improveControls();restoreContactPage();document.documentElement.classList.add('odd-optimized');}
+  function run(){normalizeTopNavigation();normalizeAllInternalLinks();pruneLegacyNavigation();improveControls();restoreContactPage();document.documentElement.classList.add('odd-optimized');}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
