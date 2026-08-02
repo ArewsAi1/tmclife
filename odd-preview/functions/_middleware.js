@@ -1,15 +1,39 @@
 class HeadInjector {
-  constructor(canonicalUrl) {
+  constructor(canonicalUrl, isHome) {
     this.canonicalUrl = canonicalUrl;
+    this.isHome = isHome;
   }
 
   element(element) {
     element.append('<link rel="stylesheet" href="/weebly-restore.css">', { html: true });
     element.append('<link rel="stylesheet" href="/site-optimizer.css">', { html: true });
+    element.append('<script src="/site-optimizer.js" defer></script>', { html: true });
     element.append('<link rel="canonical" href="' + this.canonicalUrl + '">', { html: true });
     element.append('<meta name="theme-color" content="#111111">', { html: true });
     element.append('<link rel="preconnect" href="https://cdn11.editmysite.com" crossorigin>', { html: true });
     element.append('<link rel="preconnect" href="https://cdn2.editmysite.com" crossorigin>', { html: true });
+
+    if (this.isHome) {
+      const schema = {
+        '@context': 'https://schema.org',
+        '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+        '@id': 'https://www.ogdendeckdepot.com/#business',
+        name: 'Ogden Deck Depot',
+        url: 'https://www.ogdendeckdepot.com/',
+        telephone: '+1-435-222-5819',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '190 W 33rd Street #160',
+          addressLocality: 'Ogden',
+          addressRegion: 'UT',
+          postalCode: '84401',
+          addressCountry: 'US'
+        },
+        areaServed: ['Ogden', 'Weber County', 'Davis County', 'Northern Utah'],
+        sameAs: []
+      };
+      element.append('<script type="application/ld+json">' + JSON.stringify(schema) + '</script>', { html: true });
+    }
   }
 }
 
@@ -31,13 +55,10 @@ class ImagePathNormalizer {
 
     let fixed = src;
     if (!src.startsWith('http://') && !src.startsWith('https://')) {
-      // The restored Weebly export converted local JPG/PNG files to WebP,
-      // while some HTML references retained the original extension.
       fixed = fixed.replace(/\.(jpe?g|png)(\?.*)?$/i, '.webp$2');
       fixed = fixed
         .replace(/_orig_orig\.webp(\?.*)?$/i, '_orig.webp$1')
         .replace(/-orig_orig\.webp(\?.*)?$/i, '-orig.webp$1');
-
       if (fixed !== src) element.setAttribute('src', fixed);
     }
 
@@ -94,12 +115,13 @@ export async function onRequest(context) {
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('text/html')) return response;
 
-  const canonicalUrl = 'https://www.ogdendeckdepot.com' + (url.pathname === '/index.html' ? '/' : url.pathname);
+  const isHome = url.pathname === '/' || url.pathname === '/index.html';
+  const canonicalUrl = 'https://www.ogdendeckdepot.com' + (isHome ? '/' : url.pathname);
 
   return new HTMLRewriter()
     .on('link[rel="canonical"]', new RemoveElement())
     .on('meta[name="keywords"]', new RemoveElement())
-    .on('head', new HeadInjector(canonicalUrl))
+    .on('head', new HeadInjector(canonicalUrl, isHome))
     .on('img[src]', new ImagePathNormalizer())
     .on('a[href]', new LinkNormalizer())
     .transform(response);
