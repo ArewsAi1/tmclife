@@ -4,6 +4,14 @@ class HeadInjector {
   }
 }
 
+class HomepageDeckoratorsImageFix {
+  element(element) {
+    element.setAttribute('src', '/assets/hero.webp');
+    element.setAttribute('loading', 'eager');
+    element.setAttribute('decoding', 'async');
+  }
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
 
@@ -19,7 +27,14 @@ export async function onRequest(context) {
     return response;
   }
 
-  return new HTMLRewriter()
-    .on('head', new HeadInjector())
-    .transform(response);
+  let rewriter = new HTMLRewriter().on('head', new HeadInjector());
+
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    rewriter = rewriter.on(
+      'img[src*="deckorators-voyage-line-by-ogden-deck-depot"]',
+      new HomepageDeckoratorsImageFix()
+    );
+  }
+
+  return rewriter.transform(response);
 }
