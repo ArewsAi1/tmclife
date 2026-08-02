@@ -35,6 +35,30 @@ const PAGE_META = {
     title: 'Deck Railing Systems in Ogden, Utah | Ogden Deck Depot',
     description: 'Compare steel, aluminum, cable, composite and vinyl deck railing systems at Ogden Deck Depot in Ogden, Utah.'
   },
+  '/deck-design-ogden-deck-depot.html': {
+    title: 'Deck Design and Plans in Ogden, Utah | Ogden Deck Depot',
+    description: 'Get help with deck plans, permits, material takeoffs and project preparation through Ogden Deck Depot in Northern Utah.'
+  },
+  '/lumber-yard-929035.html': {
+    title: 'Deck Lumber and Framing Materials in Ogden, Utah',
+    description: 'Shop pressure-treated lumber, framing materials and deck-building supplies through Ogden Deck Depot in Northern Utah.'
+  },
+  '/ogden-deck-depot-helical-pier-pylon-deck-footing.html': {
+    title: 'Helical Pier Deck Footings in Ogden, Utah | Ogden Deck Depot',
+    description: 'Learn about helical pier and pylon deck footing options for stable foundations, faster installation and Northern Utah soil conditions.'
+  },
+  '/deck-upgrades.html': {
+    title: 'Deck Upgrades and Accessories in Ogden, Utah',
+    description: 'Explore deck lighting, drainage, shade, railing and outdoor-living upgrades available through Ogden Deck Depot in Northern Utah.'
+  },
+  '/ogden-deck-depot-timbertech-terrain-decking-boards-in-ogden-ut.html': {
+    title: 'TimberTech Terrain+ Decking Boards in Ogden, Utah',
+    description: 'Compare TimberTech Terrain+ decking colors, board options and local availability through Ogden Deck Depot in Northern Utah.'
+  },
+  '/deck-railing-534475-211181.html': {
+    title: 'Cinch Steel Deck Railing in Ogden, Utah | Ogden Deck Depot',
+    description: 'Shop Cinch steel deck railing components and get local product guidance from Ogden Deck Depot in Northern Utah.'
+  },
   '/deckorators-venture-composite-decking-661275.html': {
     title: 'Deckorators Venture Decking in Ogden, Utah | Ogden Deck Depot',
     description: 'Shop Deckorators Venture composite decking, compare colors and get local product guidance from Ogden Deck Depot in Northern Utah.'
@@ -101,7 +125,14 @@ const PAGE_META = {
   }
 };
 
-const ASSET_VERSION = '20260802-3';
+const LEGACY_LINKS = {
+  '/decking-composite.html': '/composite-decking-ogden.html',
+  '/deck-footings-ogden.html': '/ogden-deck-depot-helical-pier-pylon-deck-footing.html',
+  '/deck-lumber.html': '/lumber-yard-929035.html',
+  '/deck-supplier-ogden-ut-gmb-stack.html': '/service-areas.html'
+};
+
+const ASSET_VERSION = '20260802-4';
 
 class HeadInjector {
   constructor(canonicalUrl, isHome, meta) {
@@ -194,11 +225,17 @@ class LinkNormalizer {
     const href = element.getAttribute('href');
     if (!href) return;
 
-    if (href.startsWith('http://ogdendeckdepot.com')) {
-      element.setAttribute('href', href.replace('http://ogdendeckdepot.com', 'https://www.ogdendeckdepot.com'));
-    } else if (href.startsWith('https://ogdendeckdepot.com')) {
-      element.setAttribute('href', href.replace('https://ogdendeckdepot.com', 'https://www.ogdendeckdepot.com'));
-    }
+    try {
+      const parsed = new URL(href, 'https://www.ogdendeckdepot.com');
+      if (LEGACY_LINKS[parsed.pathname]) {
+        parsed.pathname = LEGACY_LINKS[parsed.pathname];
+        element.setAttribute('href', parsed.pathname + parsed.search + parsed.hash);
+      } else if (parsed.hostname === 'ogdendeckdepot.com') {
+        parsed.hostname = 'www.ogdendeckdepot.com';
+        parsed.protocol = 'https:';
+        element.setAttribute('href', parsed.toString());
+      }
+    } catch (_) {}
 
     if (element.getAttribute('target') === '_blank') {
       const rel = new Set((element.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
