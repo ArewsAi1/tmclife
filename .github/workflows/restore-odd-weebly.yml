@@ -1,11 +1,10 @@
 name: Restore Exact Ogden Deck Depot Weebly Export
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [main]
     paths:
-      - .github/restore-odd-trigger.txt
+      - odd-weebly-restore-trigger.txt
   workflow_dispatch:
 
 permissions:
