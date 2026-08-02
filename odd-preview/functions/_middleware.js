@@ -92,7 +92,7 @@ class RemoveElement {
   }
 }
 
-class ImagePathNormalizer {
+class ImageOptimizer {
   constructor() {
     this.count = 0;
   }
@@ -101,15 +101,6 @@ class ImagePathNormalizer {
     this.count += 1;
     const src = element.getAttribute('src');
     if (!src || src.startsWith('data:')) return;
-
-    let fixed = src;
-    if (!src.startsWith('http://') && !src.startsWith('https://')) {
-      fixed = fixed.replace(/\.(jpe?g|png)(\?.*)?$/i, '.webp$2');
-      fixed = fixed
-        .replace(/_orig_orig\.webp(\?.*)?$/i, '_orig.webp$1')
-        .replace(/-orig_orig\.webp(\?.*)?$/i, '-orig.webp$1');
-      if (fixed !== src) element.setAttribute('src', fixed);
-    }
 
     element.setAttribute('decoding', 'async');
     if (this.count <= 2) {
@@ -121,7 +112,7 @@ class ImagePathNormalizer {
     }
 
     if (!element.getAttribute('alt')) {
-      const clean = fixed.split('/').pop().split('?')[0]
+      const clean = src.split('/').pop().split('?')[0]
         .replace(/\.(webp|jpe?g|png|gif|svg)$/i, '')
         .replace(/[-_]+/g, ' ')
         .replace(/\borig\b/gi, '')
@@ -173,7 +164,7 @@ export async function onRequest(context) {
     .on('link[rel="canonical"]', new RemoveElement())
     .on('meta[name="keywords"]', new RemoveElement())
     .on('head', new HeadInjector(canonicalUrl, isHome, meta))
-    .on('img[src]', new ImagePathNormalizer())
+    .on('img[src]', new ImageOptimizer())
     .on('a[href]', new LinkNormalizer());
 
   if (meta) {
