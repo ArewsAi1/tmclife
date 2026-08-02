@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - .github/restore-odd-trigger.txt
   workflow_dispatch:
 
 permissions:
