@@ -50,6 +50,7 @@ jobs:
             -e 's|http://cdn11\.editmysite\.com|https://cdn11.editmysite.com|g' \
             -e 's|http://cdn2\.editmysite\.com|https://cdn2.editmysite.com|g' \
             -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g' \
+            -e 's|http://www\.instagram\.com|https://www.instagram.com|g' \
             -e 's|href="http:///uploads/|href="/uploads/|g'
 
       - name: Repair missing Weebly image and script aliases
@@ -57,9 +58,24 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           from bs4 import BeautifulSoup
-          import shutil
+          import shutil, re
           root=Path('odd-preview')
           copied=0
+
+          def choose_candidate(rel):
+              p=Path(rel)
+              search_parent=p.parent.parent if p.parent.name in ('published','editor') else p.parent
+              folder=root/search_parent
+              if not folder.exists():
+                  return None
+              exact=[folder/p.name, folder/(p.stem+'_orig'+p.suffix)]
+              for c in exact:
+                  if c.exists(): return c
+              # Weebly often renamed archived files with _1, _2, etc.
+              stem=re.escape(p.stem)
+              matches=sorted([c for c in folder.glob('*'+p.suffix) if re.fullmatch(stem+r'_(?:orig|\d+)',c.stem)], key=lambda x:(0 if x.stem.endswith('_orig') else 1,x.name))
+              return matches[0] if matches else None
+
           for html in root.rglob('*.html'):
               soup=BeautifulSoup(html.read_text(errors='ignore'),'html.parser')
               refs=[]
@@ -70,32 +86,58 @@ jobs:
                           refs.append(v.split('?')[0].lstrip('/'))
               for rel in refs:
                   dest=root/rel
-                  if dest.exists():
-                      continue
-                  candidates=[]
-                  p=Path(rel)
-                  parent=p.parent
-                  if parent.name in ('published','editor'):
-                      base_parent=parent.parent
-                      candidates += [root/base_parent/(p.stem+'_orig'+p.suffix), root/base_parent/p.name]
-                  candidates += [root/p.parent/(p.stem+'_orig'+p.suffix)]
-                  for c in candidates:
-                      if c.exists():
-                          dest.parent.mkdir(parents=True,exist_ok=True)
-                          shutil.copy2(c,dest); copied+=1; break
-          # Known nested theme-script locations in this export.
+                  if dest.exists(): continue
+                  src=choose_candidate(rel)
+                  if src:
+                      dest.parent.mkdir(parents=True,exist_ok=True)
+                      shutil.copy2(src,dest); copied+=1
+
           aliases={
             'files/theme/plugins.js':'files/theme/files/plugins.js',
             'files/theme/custom.js':'files/theme/files/custom.js',
             'uploads/1/4/1/2/141231163/published/ogden-utah.png':'uploads/1/4/1/2/141231163/ogden-utah-2_orig.png',
-            'uploads/1/4/1/2/141231163/editor/ogden-utah.png':'uploads/1/4/1/2/141231163/ogden-utah-2_orig.png'
+            'uploads/1/4/1/2/141231163/editor/ogden-utah.png':'uploads/1/4/1/2/141231163/ogden-utah-2_orig.png',
+            'uploads/1/4/1/2/141231163/published/helical-piers.jpg':'uploads/1/4/1/2/141231163/helical-piers_2.jpg',
+            'uploads/1/4/1/2/141231163/published/deck-stage-ogden-deck-depot.jpg':'uploads/1/4/1/2/141231163/deck-stage-ogden-deck-depot_2.jpg',
+            'uploads/1/4/1/2/141231163/published/ogden-deck-depot.png':'uploads/1/4/1/2/141231163/ogden-deck-depot-composite-decking.png',
+            'uploads/1/4/1/2/141231163/published/the-ogden-deck-depot.jpg':'uploads/1/4/1/2/141231163/the-ogden-deck-depot_orig.jpg',
+            'uploads/1/4/1/2/141231163/published/deckorator-s-voyage-deck-depot.jpg':'uploads/1/4/1/2/141231163/deckorator-s-voyage-deck-depot_orig.jpg',
+            'uploads/1/4/1/2/141231163/published/ogden-deck-depot-engineering.jpg':'uploads/1/4/1/2/141231163/ogden-deck-depot-engineering.jpg',
+            'uploads/1/4/1/2/141231163/published/aj-vandugteren-google-service.png':'uploads/1/4/1/2/141231163/aj-vandugteren-google-service_orig.png',
+            'uploads/1/4/1/2/141231163/editor/google-reviews-jpg.jpeg':'uploads/1/4/1/2/141231163/google-reviews-jpg_orig.jpeg',
+            'uploads/1/4/1/2/141231163/background-images/1893682436.jpg':'uploads/1/4/1/2/141231163/deckorators-voyage-line-by-ogden-deck-depot_orig.jpg',
+            'uploads/1/4/1/2/141231163/background-images/758359181.jpg':'uploads/1/4/1/2/141231163/the-ogden-deck-depot_orig.jpg'
           }
           for d,s in aliases.items():
               dest,src=root/d,root/s
-              if not dest.exists() and src.exists():
-                  dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dest); copied+=1
+              if src.exists():
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copy2(src,dest); copied+=1
           print('Repaired aliases:',copied)
           PY
+
+      - name: Restore original light header appearance
+        run: |
+          cat >> odd-preview/files/main_style.css <<'CSS'
+
+/* Cloudflare archive compatibility: keep the original light navigation visible even when Weebly's runtime affix script is unavailable. */
+.birdseye-header,
+body.header-overlay-on .birdseye-header,
+body.affix .birdseye-header,
+body.no-header-page .birdseye-header,
+body.splash-banner-page .birdseye-header {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+.birdseye-header a,
+.birdseye-header .wsite-menu-item,
+.birdseye-header #wsite-title,
+.birdseye-header .wsite-phone { color: #000000 !important; }
+.birdseye-header .hamburger span,
+.birdseye-header .hamburger span:before,
+.birdseye-header .hamburger span:after { background: #000000 !important; }
+CSS
 
       - name: Verify exact export inventory
         run: |
@@ -107,6 +149,8 @@ jobs:
           test "$image_count" -ge 2300
           test -f odd-preview/files/main_style.css
           test -f odd-preview/index.html
+          test -f odd-preview/uploads/1/4/1/2/141231163/background-images/1893682436.jpg
+          test -f odd-preview/uploads/1/4/1/2/141231163/published/helical-piers.jpg
 
       - name: Commit exact Weebly site to production branch
         run: |
@@ -116,6 +160,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Repair original Weebly assets and theme compatibility"
+            git commit -m "Fix homepage images and restore original light header"
             git push origin HEAD:ogden-deck-depot-preview
           fi
