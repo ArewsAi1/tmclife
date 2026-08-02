@@ -1,2 +1,2 @@
-Trigger complete Weebly asset rebuild, image conversion, reference rewriting, and zero-missing validation.
-Run 6.
+Trigger corrected root-relative Weebly asset resolver and zero-missing validation.
+Run 7.
