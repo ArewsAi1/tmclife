@@ -1,0 +1,56 @@
+name: Repair Ogden Deck Depot Homepage
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out production branch
+        uses: actions/checkout@v4
+        with:
+          ref: ogden-deck-depot-preview
+          fetch-depth: 0
+
+      - name: Restore homepage image aliases
+        run: |
+          root="odd-preview/uploads/1/4/1/2/141231163"
+          mkdir -p "$root/background-images" "$root/published" "$root/editor"
+          cp -f "$root/deckorators-voyage-line-by-ogden-deck-depot_orig.jpg" "$root/background-images/1893682436.jpg"
+          cp -f "$root/the-ogden-deck-depot_orig.jpg" "$root/background-images/758359181.jpg"
+          cp -f "$root/ogden-utah-2_orig.png" "$root/published/ogden-utah.png"
+          cp -f "$root/ogden-utah-2_orig.png" "$root/editor/ogden-utah.png"
+          cp -f "$root/helical-piers_2.jpg" "$root/published/helical-piers.jpg"
+          cp -f "$root/deck-stage-ogden-deck-depot_2.jpg" "$root/published/deck-stage-ogden-deck-depot.jpg"
+          cp -f "$root/ogden-deck-depot-composite-decking.png" "$root/published/ogden-deck-depot.png"
+          cp -f "$root/the-ogden-deck-depot_orig.jpg" "$root/published/the-ogden-deck-depot.jpg"
+          cp -f "$root/deckorator-s-voyage-deck-depot_orig.jpg" "$root/published/deckorator-s-voyage-deck-depot.jpg"
+          cp -f "$root/aj-vandugteren-google-service_orig.png" "$root/published/aj-vandugteren-google-service.png"
+
+      - name: Restore white header
+        run: |
+          printf '%s\n' '' '/* Cloudflare archive compatibility */' '.birdseye-header, body.header-overlay-on .birdseye-header, body.affix .birdseye-header, body.no-header-page .birdseye-header, body.splash-banner-page .birdseye-header { background:#fff !important; color:#000 !important; border-color:#000 !important; }' '.birdseye-header a, .birdseye-header .wsite-menu-item, .birdseye-header #wsite-title, .birdseye-header .wsite-phone { color:#000 !important; }' '.birdseye-header .hamburger span, .birdseye-header .hamburger span:before, .birdseye-header .hamburger span:after { background:#000 !important; }' >> odd-preview/files/main_style.css
+
+      - name: Verify repaired files
+        run: |
+          test -s odd-preview/uploads/1/4/1/2/141231163/background-images/1893682436.jpg
+          test -s odd-preview/uploads/1/4/1/2/141231163/published/helical-piers.jpg
+          grep -q 'Cloudflare archive compatibility' odd-preview/files/main_style.css
+
+      - name: Commit repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A odd-preview
+          if git diff --cached --quiet; then
+            echo "No repair changes needed"
+          else
+            git commit -m "Repair homepage images and white header"
+            git push origin HEAD:ogden-deck-depot-preview
+          fi
