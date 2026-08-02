@@ -22,7 +22,7 @@ jobs:
 
       - name: Download original Weebly backup from Drive
         run: |
-          python -m pip install --quiet gdown
+          python -m pip install --quiet gdown beautifulsoup4
           gdown 1YECNBb_lVa3a5vgN--o5PnWoQzLz40rb -O /tmp/odd-weebly.zip
           test -s /tmp/odd-weebly.zip
           unzip -tq /tmp/odd-weebly.zip
@@ -52,6 +52,51 @@ jobs:
             -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g' \
             -e 's|href="http:///uploads/|href="/uploads/|g'
 
+      - name: Repair missing Weebly image and script aliases
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          import shutil
+          root=Path('odd-preview')
+          copied=0
+          for html in root.rglob('*.html'):
+              soup=BeautifulSoup(html.read_text(errors='ignore'),'html.parser')
+              refs=[]
+              for tag,attr in [('img','src'),('script','src'),('link','href')]:
+                  for el in soup.find_all(tag):
+                      v=el.get(attr)
+                      if v and not v.startswith(('http://','https://','//','data:','#','mailto:','tel:')):
+                          refs.append(v.split('?')[0].lstrip('/'))
+              for rel in refs:
+                  dest=root/rel
+                  if dest.exists():
+                      continue
+                  candidates=[]
+                  p=Path(rel)
+                  parent=p.parent
+                  if parent.name in ('published','editor'):
+                      base_parent=parent.parent
+                      candidates += [root/base_parent/(p.stem+'_orig'+p.suffix), root/base_parent/p.name]
+                  candidates += [root/p.parent/(p.stem+'_orig'+p.suffix)]
+                  for c in candidates:
+                      if c.exists():
+                          dest.parent.mkdir(parents=True,exist_ok=True)
+                          shutil.copy2(c,dest); copied+=1; break
+          # Known nested theme-script locations in this export.
+          aliases={
+            'files/theme/plugins.js':'files/theme/files/plugins.js',
+            'files/theme/custom.js':'files/theme/files/custom.js',
+            'uploads/1/4/1/2/141231163/published/ogden-utah.png':'uploads/1/4/1/2/141231163/ogden-utah-2_orig.png',
+            'uploads/1/4/1/2/141231163/editor/ogden-utah.png':'uploads/1/4/1/2/141231163/ogden-utah-2_orig.png'
+          }
+          for d,s in aliases.items():
+              dest,src=root/d,root/s
+              if not dest.exists() and src.exists():
+                  dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dest); copied+=1
+          print('Repaired aliases:',copied)
+          PY
+
       - name: Verify exact export inventory
         run: |
           html_count=$(find odd-preview -type f -name '*.html' | wc -l)
@@ -71,6 +116,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Restore exact original Ogden Deck Depot Weebly export"
+            git commit -m "Repair original Weebly assets and theme compatibility"
             git push origin HEAD:ogden-deck-depot-preview
           fi
