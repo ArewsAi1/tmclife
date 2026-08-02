@@ -37,6 +37,8 @@ const PAGE_META = {
   }
 };
 
+const ASSET_VERSION = '20260802-2';
+
 class HeadInjector {
   constructor(canonicalUrl, isHome, meta) {
     this.canonicalUrl = canonicalUrl;
@@ -45,9 +47,9 @@ class HeadInjector {
   }
 
   element(element) {
-    element.append('<link rel="stylesheet" href="/weebly-restore.css">', { html: true });
-    element.append('<link rel="stylesheet" href="/site-optimizer.css">', { html: true });
-    element.append('<script src="/site-optimizer.js" defer></script>', { html: true });
+    element.append('<link rel="stylesheet" href="/weebly-restore.css?v=' + ASSET_VERSION + '">', { html: true });
+    element.append('<link rel="stylesheet" href="/site-optimizer.css?v=' + ASSET_VERSION + '">', { html: true });
+    element.append('<script src="/site-optimizer.js?v=' + ASSET_VERSION + '" defer></script>', { html: true });
     element.append('<link rel="canonical" href="' + this.canonicalUrl + '">', { html: true });
     element.append('<meta name="theme-color" content="#111111">', { html: true });
     element.append('<link rel="preconnect" href="https://cdn11.editmysite.com" crossorigin>', { html: true });
