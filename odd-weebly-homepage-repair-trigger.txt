@@ -1,2 +1,2 @@
 Trigger corrected root-relative Weebly asset resolver and zero-missing validation.
-Run 8.
+Run 9.
