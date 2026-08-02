@@ -1,0 +1,86 @@
+name: Restore Exact Ogden Deck Depot Weebly Export
+
+on:
+  push:
+    branches:
+      - ogden-deck-depot-preview
+    paths:
+      - .github/workflows/restore-odd-weebly.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out production branch
+        uses: actions/checkout@v4
+        with:
+          ref: ogden-deck-depot-preview
+          fetch-depth: 0
+
+      - name: Download original Weebly backup from Drive
+        run: |
+          python -m pip install --quiet gdown
+          gdown --id 1YECNBb_lVa3a5vgN--o5PnWoQzLz40rb -O /tmp/odd-weebly.zip
+          test -s /tmp/odd-weebly.zip
+          unzip -tq /tmp/odd-weebly.zip
+
+      - name: Extract exact original site tree
+        run: |
+          rm -rf /tmp/odd-extract /tmp/odd-preserve
+          mkdir -p /tmp/odd-extract /tmp/odd-preserve
+          unzip -q /tmp/odd-weebly.zip -d /tmp/odd-extract
+          src="$(find /tmp/odd-extract -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+          test -f "$src/index.html"
+
+          for item in functions _headers _redirects; do
+            if [ -e "odd-preview/$item" ]; then
+              cp -a "odd-preview/$item" "/tmp/odd-preserve/$item"
+            fi
+          done
+
+          rm -rf odd-preview
+          mkdir -p odd-preview
+          cp -a "$src/." odd-preview/
+
+          for item in functions _headers _redirects; do
+            if [ -e "/tmp/odd-preserve/$item" ]; then
+              cp -a "/tmp/odd-preserve/$item" "odd-preview/$item"
+            fi
+          done
+
+      - name: Make archived Weebly files safe on HTTPS
+        run: |
+          find odd-preview -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -print0 | \
+            xargs -0 sed -i \
+              -e 's|http://cdn11\.editmysite\.com|https://cdn11.editmysite.com|g' \
+              -e 's|http://cdn2\.editmysite\.com|https://cdn2.editmysite.com|g' \
+              -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g' \
+              -e 's|href="http:///uploads/|href="/uploads/|g'
+
+      - name: Verify exact export inventory
+        run: |
+          html_count=$(find odd-preview -type f -name '*.html' | wc -l)
+          image_count=$(find odd-preview -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' \) | wc -l)
+          echo "HTML pages: $html_count"
+          echo "Images: $image_count"
+          test "$html_count" -ge 360
+          test "$image_count" -ge 2300
+          test -f odd-preview/files/main_style.css
+          test -f odd-preview/index.html
+
+      - name: Commit exact Weebly site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A odd-preview
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Restore exact original Ogden Deck Depot Weebly export"
+            git push origin HEAD:ogden-deck-depot-preview
+          fi
