@@ -349,3 +349,8 @@ div.paragraph ol, div.paragraph ol li { list-style: decimal outside !important; 
 .birdseye-header, body.header-overlay-on .birdseye-header, body.affix .birdseye-header, body.no-header-page .birdseye-header, body.splash-banner-page .birdseye-header { background:#fff !important; color:#000 !important; border-color:#000 !important; }
 .birdseye-header a, .birdseye-header .wsite-menu-item, .birdseye-header #wsite-title, .birdseye-header .wsite-phone { color:#000 !important; }
 .birdseye-header .hamburger span, .birdseye-header .hamburger span:before, .birdseye-header .hamburger span:after { background:#000 !important; }
+
+/* Cloudflare archive compatibility */
+.birdseye-header, body.header-overlay-on .birdseye-header, body.affix .birdseye-header, body.no-header-page .birdseye-header, body.splash-banner-page .birdseye-header { background:#fff !important; color:#000 !important; border-color:#000 !important; }
+.birdseye-header a, .birdseye-header .wsite-menu-item, .birdseye-header #wsite-title, .birdseye-header .wsite-phone { color:#000 !important; }
+.birdseye-header .hamburger span, .birdseye-header .hamburger span:before, .birdseye-header .hamburger span:after { background:#000 !important; }
