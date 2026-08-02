@@ -23,9 +23,49 @@ const PAGE_META = {
     title: 'Trex Deck Boards for Sale in Ogden, Utah | Ogden Deck Depot',
     description: 'Shop Trex deck boards, fascia, accessories and railing locally through Ogden Deck Depot in Ogden, Utah.'
   },
+  '/fiberon-decking.html': {
+    title: 'Fiberon Composite Decking in Ogden, Utah | Ogden Deck Depot',
+    description: 'Explore Fiberon composite decking colors and collections with local material guidance and availability from Ogden Deck Depot in Northern Utah.'
+  },
   '/deck-railing-ogden.html': {
     title: 'Deck Railing Systems in Ogden, Utah | Ogden Deck Depot',
     description: 'Compare steel, aluminum, cable, composite and vinyl deck railing systems at Ogden Deck Depot in Ogden, Utah.'
+  },
+  '/deckorators-venture-composite-decking-661275.html': {
+    title: 'Deckorators Venture Decking in Ogden, Utah | Ogden Deck Depot',
+    description: 'Shop Deckorators Venture composite decking, compare colors and get local product guidance from Ogden Deck Depot in Northern Utah.'
+  },
+  '/deckorators-voyage-composite-decking.html': {
+    title: 'Deckorators Voyage Decking in Ogden, Utah | Ogden Deck Depot',
+    description: 'Explore Deckorators Voyage mineral-based composite decking colors and availability through Ogden Deck Depot in Northern Utah.'
+  },
+  '/timbertech-terrain-natural-white-oak-decking-in-ogden-ut.html': {
+    title: 'TimberTech Natural White Oak Decking in Ogden, Utah',
+    description: 'Shop TimberTech Terrain+ Natural White Oak decking locally through Ogden Deck Depot for projects across Northern Utah.'
+  },
+  '/zip-up-underdeck-ceilings-lighting-ogden.html': {
+    title: 'Zip-Up Underdeck Ceiling Systems in Ogden, Utah',
+    description: 'Explore Zip-Up underdeck ceiling panels and lighting options from Ogden Deck Depot for dry, finished outdoor spaces in Northern Utah.'
+  },
+  '/product-gallery.html': {
+    title: 'Decking and Railing Product Gallery | Ogden Deck Depot',
+    description: 'Browse decking, railing and outdoor-building product examples available through Ogden Deck Depot in Ogden, Utah.'
+  },
+  '/premium-decking-supply-for-eden-utah.html': {
+    title: 'Decking Supply for Eden, Utah | Ogden Deck Depot',
+    description: 'Shop composite decking, railing, framing materials and deck-building supplies for Eden, Utah projects through Ogden Deck Depot.'
+  },
+  '/decking-supply-huntsville-utah.html': {
+    title: 'Decking Supply for Huntsville, Utah | Ogden Deck Depot',
+    description: 'Get composite decking, railing, lumber and deck-building materials for Huntsville, Utah from Ogden Deck Depot.'
+  },
+  '/decking-supply-layton-utah.html': {
+    title: 'Decking Supply for Layton, Utah | Ogden Deck Depot',
+    description: 'Shop decking, railing, lumber and professional deck-building supplies for Layton, Utah projects through Ogden Deck Depot.'
+  },
+  '/decking-supply-kaysville-utah.html': {
+    title: 'Decking Supply for Kaysville, Utah | Ogden Deck Depot',
+    description: 'Find composite decking, railing, lumber and deck-building materials for Kaysville, Utah at Ogden Deck Depot.'
   },
   '/contact.html': {
     title: 'Contact Ogden Deck Depot | Decking Supply in Ogden, Utah',
