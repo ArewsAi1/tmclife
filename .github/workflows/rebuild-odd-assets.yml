@@ -1,0 +1,190 @@
+name: Rebuild Ogden Deck Depot Assets
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out production branch
+        uses: actions/checkout@v4
+        with:
+          ref: ogden-deck-depot-preview
+          fetch-depth: 0
+
+      - name: Download untouched Weebly export
+        run: |
+          python -m pip install --quiet gdown pillow beautifulsoup4
+          gdown 1YECNBb_lVa3a5vgN--o5PnWoQzLz40rb -O /tmp/odd-weebly.zip
+          unzip -tq /tmp/odd-weebly.zip
+
+      - name: Extract complete site and preserve Cloudflare files
+        run: |
+          rm -rf /tmp/odd-extract /tmp/odd-preserve
+          mkdir -p /tmp/odd-extract /tmp/odd-preserve
+          unzip -q /tmp/odd-weebly.zip -d /tmp/odd-extract
+          src="$(find /tmp/odd-extract -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+          test -f "$src/index.html"
+          for item in functions _headers _redirects; do
+            if [ -e "odd-preview/$item" ]; then cp -a "odd-preview/$item" "/tmp/odd-preserve/$item"; fi
+          done
+          rm -rf odd-preview
+          mkdir -p odd-preview
+          cp -a "$src/." odd-preview/
+          for item in functions _headers _redirects; do
+            if [ -e "/tmp/odd-preserve/$item" ]; then cp -a "/tmp/odd-preserve/$item" "odd-preview/$item"; fi
+          done
+
+      - name: Convert images and rewrite every local reference
+        run: |
+          cat > /tmp/rebuild_assets.py <<'PY'
+          from pathlib import Path
+          from urllib.parse import unquote
+          from PIL import Image
+          import os, re
+
+          root = Path('odd-preview')
+          text_exts = {'.html','.htm','.css','.js','.json','.xml','.txt'}
+          image_exts = {'.jpg','.jpeg','.png','.webp','.gif','.svg','.ico'}
+          conversion = {}
+
+          for src in list(root.rglob('*')):
+              if not src.is_file() or src.suffix.lower() not in {'.jpg','.jpeg','.png'}:
+                  continue
+              rel = src.relative_to(root).as_posix()
+              dst = src.with_suffix('.webp')
+              try:
+                  with Image.open(src) as im:
+                      im.load()
+                      if max(im.size) > 1600:
+                          im.thumbnail((1600,1600), Image.Resampling.LANCZOS)
+                      if im.mode not in ('RGB','RGBA'):
+                          im = im.convert('RGBA' if 'transparency' in im.info else 'RGB')
+                      dst.parent.mkdir(parents=True, exist_ok=True)
+                      im.save(dst, 'WEBP', quality=72, method=6)
+                  conversion[rel] = dst.relative_to(root).as_posix()
+                  if dst != src:
+                      src.unlink()
+              except Exception as exc:
+                  print('KEEP ORIGINAL', rel, exc)
+
+          text_files = [p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in text_exts]
+          for p in text_files:
+              try:
+                  text = p.read_text(errors='ignore')
+              except Exception:
+                  continue
+              original = text
+              for old,new in conversion.items():
+                  variants = {
+                      old:new,
+                      '/'+old:'/'+new,
+                      old.replace(' ','%20'):new.replace(' ','%20'),
+                      ('/'+old).replace(' ','%20'):('/'+new).replace(' ','%20'),
+                  }
+                  for a,b in variants.items():
+                      text = text.replace(a,b)
+              if text != original:
+                  p.write_text(text)
+
+          def norm_stem(path):
+              stem = Path(path).stem.lower()
+              stem = re.sub(r'_(orig|\d+)$','',stem)
+              stem = re.sub(r'[^a-z0-9]+','-',stem).strip('-')
+              return stem
+
+          image_files = [p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in image_exts]
+          by_stem = {}
+          for p in image_files:
+              by_stem.setdefault(norm_stem(p.name), []).append(p)
+
+          url_re = re.compile(r'''(?P<q>["'(=:\s])(?P<u>/?[^"'()\s]+?\.(?:webp|jpe?g|png|gif|svg|ico)(?:\?[^"'()\s]*)?)''', re.I)
+          repaired = 0
+          for p in text_files:
+              try:
+                  text = p.read_text(errors='ignore')
+              except Exception:
+                  continue
+              def replace(m):
+                  nonlocal repaired
+                  raw = m.group('u')
+                  clean = unquote(raw.split('?',1)[0].split('#',1)[0])
+                  if clean.startswith(('http://','https://','//','data:')):
+                      return m.group(0)
+                  if clean.startswith('/'):
+                      target = root / clean.lstrip('/')
+                      root_style = True
+                  else:
+                      target = (p.parent / clean).resolve()
+                      root_style = False
+                  if target.exists():
+                      return m.group(0)
+                  candidates = by_stem.get(norm_stem(clean), [])
+                  if not candidates:
+                      return m.group(0)
+                  candidate = sorted(candidates, key=lambda x: (0 if 'uploads' in x.parts else 1, len(x.as_posix())))[0]
+                  if root_style:
+                      new = '/' + candidate.relative_to(root).as_posix()
+                  else:
+                      new = os.path.relpath(candidate, p.parent).replace(os.sep,'/')
+                  repaired += 1
+                  return m.group('q') + new
+              updated = url_re.sub(replace, text)
+              if updated != text:
+                  p.write_text(updated)
+
+          missing = []
+          for p in text_files:
+              try:
+                  text = p.read_text(errors='ignore')
+              except Exception:
+                  continue
+              for m in url_re.finditer(text):
+                  raw = m.group('u')
+                  clean = unquote(raw.split('?',1)[0].split('#',1)[0])
+                  if clean.startswith(('http://','https://','//','data:')):
+                      continue
+                  target = root / clean.lstrip('/') if clean.startswith('/') else p.parent / clean
+                  if not target.exists():
+                      missing.append((p.relative_to(root).as_posix(), raw))
+
+          print('Converted images:', len(conversion))
+          print('Heuristic reference repairs:', repaired)
+          print('Missing local image references:', len(missing))
+          for item in missing[:100]:
+              print('MISSING', item[0], '=>', item[1])
+          Path('/tmp/odd_missing_assets.txt').write_text('\n'.join(f'{a} => {b}' for a,b in missing))
+          if missing:
+              raise SystemExit('Asset validation failed: local image references remain missing')
+          PY
+          python /tmp/rebuild_assets.py
+
+      - name: Restore HTTPS and original light header compatibility
+        run: |
+          find odd-preview -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -print0 | xargs -0 sed -i \
+            -e 's|http://cdn11\.editmysite\.com|https://cdn11.editmysite.com|g' \
+            -e 's|http://cdn2\.editmysite\.com|https://cdn2.editmysite.com|g' \
+            -e 's|http://cdn1\.editmysite\.com|https://cdn1.editmysite.com|g'
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('odd-preview/files/main_style.css')
+          css.write_text(css.read_text(errors='ignore') + '''\n.birdseye-header,body.header-overlay-on .birdseye-header,body.affix .birdseye-header{background:#fff!important;color:#000!important}.birdseye-header a,.birdseye-header .wsite-menu-item,.birdseye-header #wsite-title{color:#000!important}\n''')
+          PY
+
+      - name: Verify package and commit atomically
+        run: |
+          test -f odd-preview/index.html
+          test -f odd-preview/files/main_style.css
+          test "$(find odd-preview -type f -name '*.html' | wc -l)" -ge 360
+          test ! -s /tmp/odd_missing_assets.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A odd-preview
+          git commit -m "Rebuild complete Weebly image tree and rewrite all references" || exit 0
+          git push origin HEAD:ogden-deck-depot-preview
