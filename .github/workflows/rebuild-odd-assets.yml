@@ -105,14 +105,13 @@ jobs:
               by_stem.setdefault(norm_stem(p.name), []).append(p)
 
           url_re = re.compile(r'''(?P<q>["'(=:\s])(?P<u>/?[^"'()\s]+?\.(?:webp|jpe?g|png|gif|svg|ico)(?:\?[^"'()\s]*)?)''', re.I)
-          repaired = 0
+          repaired = [0]
           for p in text_files:
               try:
                   text = p.read_text(errors='ignore')
               except Exception:
                   continue
               def replace(m):
-                  nonlocal repaired
                   raw = m.group('u')
                   clean = unquote(raw.split('?',1)[0].split('#',1)[0])
                   if clean.startswith(('http://','https://','//','data:')):
@@ -133,7 +132,7 @@ jobs:
                       new = '/' + candidate.relative_to(root).as_posix()
                   else:
                       new = os.path.relpath(candidate, p.parent).replace(os.sep,'/')
-                  repaired += 1
+                  repaired[0] += 1
                   return m.group('q') + new
               updated = url_re.sub(replace, text)
               if updated != text:
@@ -155,7 +154,7 @@ jobs:
                       missing.append((p.relative_to(root).as_posix(), raw))
 
           print('Converted images:', len(conversion))
-          print('Heuristic reference repairs:', repaired)
+          print('Heuristic reference repairs:', repaired[0])
           print('Missing local image references:', len(missing))
           for item in missing[:100]:
               print('MISSING', item[0], '=>', item[1])
