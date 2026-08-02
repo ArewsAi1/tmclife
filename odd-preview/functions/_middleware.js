@@ -101,7 +101,7 @@ const PAGE_META = {
   }
 };
 
-const ASSET_VERSION = '20260802-2';
+const ASSET_VERSION = '20260802-3';
 
 class HeadInjector {
   constructor(canonicalUrl, isHome, meta) {
