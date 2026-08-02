@@ -23,6 +23,10 @@ const PAGE_META = {
     title: 'Trex Deck Boards for Sale in Ogden, Utah | Ogden Deck Depot',
     description: 'Shop Trex deck boards, fascia, accessories and railing locally through Ogden Deck Depot in Ogden, Utah.'
   },
+  '/trex-fascia-boards-ogden.html': {
+    title: 'Trex Fascia Boards and Trim in Ogden, Utah | Ogden Deck Depot',
+    description: 'Shop Trex fascia boards and matching trim for clean deck edges and stair finishes through Ogden Deck Depot in Northern Utah.'
+  },
   '/fiberon-decking.html': {
     title: 'Fiberon Composite Decking in Ogden, Utah | Ogden Deck Depot',
     description: 'Explore Fiberon composite decking colors and collections with local material guidance and availability from Ogden Deck Depot in Northern Utah.'
@@ -38,6 +42,26 @@ const PAGE_META = {
   '/deckorators-voyage-composite-decking.html': {
     title: 'Deckorators Voyage Decking in Ogden, Utah | Ogden Deck Depot',
     description: 'Explore Deckorators Voyage mineral-based composite decking colors and availability through Ogden Deck Depot in Northern Utah.'
+  },
+  '/saltwater-deckorators-vault-composite-decking-521015.html': {
+    title: 'Deckorators Venture Saltwater Decking | Ogden Deck Depot',
+    description: 'Shop Deckorators Venture Saltwater composite decking and compare local availability, pricing and matching materials in Northern Utah.'
+  },
+  '/venture-deckorators-venture-composite-decking-521015-163568.html': {
+    title: 'Deckorators Venture Sandbar Decking | Ogden Deck Depot',
+    description: 'Explore Deckorators Venture Sandbar composite decking with local product guidance, availability and project support from Ogden Deck Depot.'
+  },
+  '/mesa-deckorators-voyage-composite-decking.html': {
+    title: 'Deckorators Voyage Mesa Decking | Ogden Deck Depot',
+    description: 'Shop Deckorators Voyage Mesa mineral-based composite decking and get local availability and material guidance in Northern Utah.'
+  },
+  '/sierra-deckorators-voyage-composite-decking.html': {
+    title: 'Deckorators Voyage Sierra Decking | Ogden Deck Depot',
+    description: 'Explore Deckorators Voyage Sierra composite decking with local product availability and project guidance from Ogden Deck Depot.'
+  },
+  '/dark-slate-deckorators-voyage-composite-decking.html': {
+    title: 'Deckorators Voyage Dark Slate Decking | Ogden Deck Depot',
+    description: 'Shop Deckorators Voyage Dark Slate decking for borders, accents and full decks with local supply support in Northern Utah.'
   },
   '/timbertech-terrain-natural-white-oak-decking-in-ogden-ut.html': {
     title: 'TimberTech Natural White Oak Decking in Ogden, Utah',
