@@ -23,7 +23,7 @@ jobs:
       - name: Download original Weebly backup from Drive
         run: |
           python -m pip install --quiet gdown
-          gdown --id 1YECNBb_lVa3a5vgN--o5PnWoQzLz40rb -O /tmp/odd-weebly.zip
+          gdown 1YECNBb_lVa3a5vgN--o5PnWoQzLz40rb -O /tmp/odd-weebly.zip
           test -s /tmp/odd-weebly.zip
           unzip -tq /tmp/odd-weebly.zip
 
