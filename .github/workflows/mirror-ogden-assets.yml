@@ -1,0 +1,42 @@
+name: Mirror Ogden Decks Assets
+
+on:
+  push:
+    branches:
+      - ogden-decks-staging
+    paths:
+      - 'scripts/mirror_ogden_assets.py'
+      - '.github/workflows/mirror-ogden-assets.yml'
+      - 'ogden-decks-preview/**/*.html'
+      - 'ogden-decks-preview/**/*.css'
+      - 'ogden-decks-preview/**/*.xml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror-assets:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out staging branch
+        uses: actions/checkout@v4
+        with:
+          ref: ogden-decks-staging
+          fetch-depth: 0
+
+      - name: Mirror referenced upload assets
+        run: python3 scripts/mirror_ogden_assets.py
+
+      - name: Commit mirrored assets
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "No asset changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ogden-decks-preview
+          git commit -m "Mirror Ogden Decks upload assets locally"
+          git push origin HEAD:ogden-decks-staging
