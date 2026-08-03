@@ -1,5 +1,10 @@
 /uploads/5/6/0/8/56087945/published/logo-8-1.png /assets/ogden-decks-logo.svg 302
 /uploads/* /assets/ogden-decks-project.webp 302
+/about-us1.html /about-us.html 301
+/blog.html /blog 301
+/blog/archives/* /blog 301
+/blog/category/* /blog 301
+/blog/deck-repair-services-in-ogden-ut-restore-safety-function-and-curb-appeal-with-ogden-decks.html /blog/deck-repair-services-in-ogden-ut-restore-safety-function-and-curb-appeal-with-ogden-decks 301
 /deck-builder-layton-ut.html /deck-builder-layton-utah.html 301
 /clearfield-deck-builder.html /deck-builder-clearfield-ut.html 301
 /deck-builder-west-haven-ut.html /deck-builder-west-haven.html 301
