@@ -11,14 +11,23 @@ REDIRECTS = ROOT / '_redirects'
 
 def local_paths():
     paths = {'/'}
-    for p in ROOT.rglob('*.html'):
+    for p in ROOT.rglob('*'):
+        if not p.is_file():
+            continue
         rel = p.relative_to(ROOT).as_posix()
-        if rel == 'index.html':
-            paths.add('/')
-        elif rel.endswith('/index.html'):
-            paths.add('/' + rel[:-10].rstrip('/'))
-        else:
-            paths.add('/' + rel)
+        if p.suffix.lower() == '.html':
+            if rel == 'index.html':
+                paths.add('/')
+            elif rel.endswith('/index.html'):
+                paths.add('/' + rel[:-10].rstrip('/'))
+            else:
+                paths.add('/' + rel)
+        elif p.parent.name == 'blog' and not p.suffix:
+            try:
+                if '<html' in p.read_text(encoding='utf-8', errors='replace').lower():
+                    paths.add('/' + rel)
+            except OSError:
+                pass
     return paths
 
 
@@ -31,20 +40,20 @@ def target(path):
     if 'contact' in s: return '/contact-us.html'
     if 'about' in s or 'provider' in s: return '/about-us.html'
     places = {
-        'layton':'/layton-spa.html','syracuse':'/syracuse-spa.html','clinton':'/clinton-spa.html',
-        'roy':'/roy-spa.html','sunset':'/sunset-spa.html','west-point':'/west-point-spa.html',
-        'riverdale':'/riverdale-spa.html','west-haven':'/west-haven-spa.html','davis-county':'/davis-county-medical-spa.html'
+        'layton':'/layton-spa.html','syracuse':'/spa-syracuse-utah.html','clinton':'/spa-clinton-utah.html',
+        'roy':'/spa-roy-utah.html','sunset':'/spa-sunset-utah.html','west-point':'/spa-west-point-utah.html',
+        'riverdale':'/spa-riverdale-utah.html','west-haven':'/spa-west-haven-utah.html','davis-county':'/davis-county-medical-spa.html'
     }
     for key, dest in places.items():
         if key in s: return dest
-    if 'tattoo' in s: return '/tattoo-removal.html'
+    if 'tattoo' in s: return '/tattooremoval-clearfield.html'
     if re.search(r'laser|hair-removal|full-body-laser|bikini-line-laser|back-and-chest-laser|leg-laser', s): return '/laserhairremoval.html'
     if re.search(r'botox|dysport|filler|sculptra|inject|pixie-tip', s): return '/botox.html'
     if 'wax' in s: return '/waxing.html'
     if re.search(r'lash|brow|microblad|ombre|powder|henna', s): return '/eyelashextensions.html'
     if re.search(r'massage|prenatal|stone|reflex|swedish|deep-tissue|sports-massage|couplesmassage|deeptissue', s): return '/massage.html'
     if re.search(r'facial|skin|peel|microneed|derma|ipl|glow|hydra|acne|carbon|retinol|oxygen|photo-rejuvenation|collagen|azelaic', s): return '/facials.html'
-    if re.search(r'teeth|whitening', s): return '/teeth-whitening.html'
+    if re.search(r'teeth|whitening', s): return '/teethwhitening.html'
     if re.search(r'body|sculpt|cellulite|cupping|emsella|fat-reduction|gluteal', s): return '/body-sculpting-services.html'
     return '/services.html'
 
