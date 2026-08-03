@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /
+
+Sitemap: https://www.hydemedspaclearfield.com/sitemap.xml
