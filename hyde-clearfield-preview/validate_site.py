@@ -24,7 +24,18 @@ def visible_text(html: str) -> str:
     html = re.sub(r"<[^>]+>", " ", html)
     return re.sub(r"\s+", " ", html).strip()
 
-html_files = [p for p in ROOT.rglob("*.html") if ".git" not in p.parts]
+
+def is_html_document(path: Path) -> bool:
+    if path.suffix.lower() == ".html":
+        return True
+    if path.parent.name == "blog" and not path.suffix:
+        try:
+            return "<html" in path.read_text(encoding="utf-8", errors="replace").lower()
+        except OSError:
+            return False
+    return False
+
+html_files = [p for p in ROOT.rglob("*") if p.is_file() and is_html_document(p)]
 routes = {route_for(p): p for p in html_files}
 canonical_to_route = {}
 indexable_routes = set()
@@ -33,7 +44,7 @@ for path in html_files:
     route = route_for(path)
     html = path.read_text(encoding="utf-8", errors="replace")
     robots = re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\']([^"\']+)', html, re.I)
-    noindex = robots and "noindex" in robots.group(1).lower()
+    noindex = bool(robots and "noindex" in robots.group(1).lower())
     if route == "/404.html":
         if not noindex:
             errors.append("404.html must be noindex")
@@ -102,10 +113,7 @@ if redirect_path.exists():
         target_path = target.split("?", 1)[0].split("#", 1)[0]
         if "*" in target_path or ":" in target_path:
             continue
-        valid_target = target_path in routes or target_path in {"/blog", "/"}
-        if not valid_target and target_path.endswith(".html"):
-            valid_target = target_path in routes
-        if not valid_target:
+        if target_path not in routes and target_path not in {"/blog", "/"}:
             errors.append(f"_redirects:{line_no}: missing target {target}")
 
 robots_path = ROOT / "robots.txt"
@@ -122,4 +130,4 @@ if errors:
         print(f"- {error}")
     sys.exit(1)
 
-print(f"SITE VALIDATION PASSED: {len(html_files)} HTML files, {len(sitemap_urls)} sitemap URLs, {len(redirect_sources)} redirect rules")
+print(f"SITE VALIDATION PASSED: {len(html_files)} HTML documents, {len(sitemap_urls)} sitemap URLs, {len(redirect_sources)} redirect rules")
