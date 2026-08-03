@@ -8,3 +8,4 @@ Sitemap: https://www.ogdendecks.com/sitemap-migrated-batch-6.xml
 Sitemap: https://www.ogdendecks.com/sitemap-migrated-batch-7.xml
 Sitemap: https://www.ogdendecks.com/sitemap-migrated-batch-8.xml
 Sitemap: https://www.ogdendecks.com/sitemap-migrated-batch-9.xml
+Sitemap: https://www.ogdendecks.com/sitemap-migrated-batch-10.xml
