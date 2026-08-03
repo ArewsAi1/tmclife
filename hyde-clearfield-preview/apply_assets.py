@@ -10,4 +10,4 @@ html = html.replace(
     'alt="Hyde Beauty and Wellness original brand photography" width="800" height="534" loading="eager" fetchpriority="high"'
 )
 index.write_text(html, encoding="utf-8")
-print("Applied locally hosted Hyde Clearfield imagery")
+print("Applied locally hosted Hyde Clearfield imagery and social metadata")
