@@ -95,6 +95,7 @@ else:
 
 redirect_path = ROOT / "_redirects"
 redirect_sources = set()
+redirect_map = {}
 if redirect_path.exists():
     for line_no, raw in enumerate(redirect_path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
         line = raw.strip()
@@ -108,6 +109,7 @@ if redirect_path.exists():
         if source in redirect_sources:
             errors.append(f"_redirects:{line_no}: duplicate source {source}")
         redirect_sources.add(source)
+        redirect_map[source] = target
         if target.startswith("https://"):
             continue
         target_path = target.split("?", 1)[0].split("#", 1)[0]
@@ -115,6 +117,11 @@ if redirect_path.exists():
             continue
         if target_path not in routes and target_path not in {"/blog", "/"}:
             errors.append(f"_redirects:{line_no}: missing target {target}")
+
+for source, target in redirect_map.items():
+    target_path = target.split("?", 1)[0].split("#", 1)[0]
+    if target_path in redirect_map and "*" not in source and ":" not in source:
+        errors.append(f"redirect chain: {source} -> {target_path} -> {redirect_map[target_path]}")
 
 robots_path = ROOT / "robots.txt"
 if not robots_path.exists():
@@ -130,4 +137,4 @@ if errors:
         print(f"- {error}")
     sys.exit(1)
 
-print(f"SITE VALIDATION PASSED: {len(html_files)} HTML documents, {len(sitemap_urls)} sitemap URLs, {len(redirect_sources)} redirect rules")
+print(f"SITE VALIDATION PASSED: {len(html_files)} HTML documents, {len(sitemap_urls)} sitemap URLs, {len(redirect_sources)} redirect rules, zero redirect chains")
