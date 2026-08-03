@@ -76,15 +76,27 @@ def main():
                 generated.append(f'{path} {dest} 301')
     except Exception as exc:
         print(f'Warning: live sitemap unavailable; preserving existing redirects: {exc}')
-    lines = []
-    seen = set()
+
+    deduped = {}
     for line in existing + generated:
-        source = line.split()[0] if line.split() else ''
-        if source and source not in seen:
-            lines.append(line)
-            seen.add(source)
+        parts = line.split()
+        if parts:
+            deduped.setdefault(parts[0], line)
+
+    exact = []
+    wildcard = []
+    for line in deduped.values():
+        source = line.split()[0]
+        if '*' in source or ':' in source:
+            wildcard.append(line)
+        else:
+            exact.append(line)
+    exact.sort(key=lambda line: line.split()[0])
+    wildcard.sort(key=lambda line: line.split()[0])
+    lines = exact + wildcard
+
     REDIRECTS.write_text('# AUTO-GENERATED LEGACY COVERAGE\n' + '\n'.join(lines) + '\n', encoding='utf-8')
-    print(f'Legacy redirect coverage: {len(lines)} rules ({len(generated)} generated from live sitemap)')
+    print(f'Legacy redirect coverage: {len(lines)} rules ({len(generated)} generated from live sitemap; {len(wildcard)} wildcard rules last)')
 
 if __name__ == '__main__':
     main()
