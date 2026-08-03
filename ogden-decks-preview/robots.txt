@@ -8,4 +8,4 @@ Disallow: /receipt-submission-form.html
 Disallow: /re-imbursement-of-expense.html
 Disallow: /expense-reimbursement.html
 Disallow: /time-clock-correction.html
-Sitemap: https://www.ogdendecks.com/sitemap-index.xml
+Sitemap: https://www.ogdendecks.com/sitemap.xml
